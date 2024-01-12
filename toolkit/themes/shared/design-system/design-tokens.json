@@ -1,26 +1,37 @@
 {
-
   "color": {
     "background": {
       "critical": {
-        "light": "{color.red.05}",
-        "dark": "{color.red.80}",
-        "prefers-contrast": false
+        "light": {
+          "value": "{color.red.05}"
+        },
+        "dark": {
+          "value": "{color.red.80}"
+        }
       },
       "information": {
-        "light": "{color.blue.05}",
-        "dark": "{color.blue.80}",
-        "prefers-contrast": false
+        "light": {
+          "value": "{color.blue.05}"
+        },
+        "dark": {
+          "value": "{color.blue.80}"
+        }
       },
       "success": {
-        "light": "{color.green.05}",
-        "dark": "{color.yellow.80}",
-        "prefers-contrast": false
+        "light": {
+          "value": "{color.green.05}"
+        },
+        "dark": {
+          "value": "{color.yellow.80}"
+        }
       },
       "warning": {
-        "light": "{color.yellow.05}",
-        "dark": "{color.yellow.80}",
-        "prefers-contrast": false
+        "light": {
+          "value": "{color.yellow.05}"
+        },
+        "dark": {
+          "value": "{color.blue.80}"
+        }
       }
     },
     "black": {
@@ -129,23 +140,35 @@
   "text": {
     "color": {
       "prefers-contrast": {
-        "value": "CanvasText",
-        "deemphasized": "inherit"
+        "value": "CanvasText"
       },
-      "brand": {
-        "default": {
-          "light": "{color.gray.100}",
-          "dark": "{color.gray.05}"
-        },
-        "deemphasized": {
-          "light": "color-mix(in srgb, currentColor 69%, transparent)",
-          "dark": "color-mix(in srgb, currentColor 75%, transparent)"
+      "deemphasized": {
+        "prefers-contrast": {
+          "value": "inherit"
         }
       },
-      "platform": {
-        "default": "currentColor",
-        "deemphasized": "color-mix(in srgb, currentColor 60%, transparent)"
+      "brand": {
+        "light": {
+          "value": "{color.gray.100}"
+        },
+        "dark": {
+          "value": "{color.gray.05}"
+        },
+        "deemphasized": {
+          "light": {
+            "value": "color-mix(in srgb, currentColor 69%, transparent)"
+          },
+          "dark": {
+            "value": "color-mix(in srgb, currentColor 75%, transparent)"
+          }
+        }
       }
+    }
+  },
+  "platform": {
+    "value": "currentColor",
+    "deemphasized": {
+      "value": "color-mix(in srgb, currentColor 60%, transparent)"
     }
   }
 }
