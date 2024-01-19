@@ -1,0 +1,51 @@
+/**
+ * Do not edit directly
+ * Generated on Fri, 12 Jan 2024 19:25:11 GMT
+ */
+
+:root {
+  --color-background-critical-light: #ffe8e8;
+  --color-background-critical-dark: #690f22;
+  --color-background-information-light: #deeafc;
+  --color-background-information-dark: #003070;
+  --color-background-success-light: #d8eedc;
+  --color-background-success-dark: #5a3100;
+  --color-background-warning-light: #ffebcd;
+  --color-background-warning-dark: #003070;
+  --color-black-a10: rgba(0, 0, 0, 0.1);
+  --color-blue-30: #73a7f3;
+  --color-blue-50: #0060df;
+  --color-blue-60: #0250bb;
+  --color-blue-70: #054096;
+  --color-blue-80: #003070;
+  --color-blue-05: #deeafc;
+  --color-cyan-20: #aaf2ff;
+  --color-cyan-30: #aaf2ff;
+  --color-cyan-50: #00ddff;
+  --color-gray-50: #bfbfc9;
+  --color-gray-60: #8f8f9d;
+  --color-gray-70: #5b5b66;
+  --color-gray-80: #23222b;
+  --color-gray-90: #1c1b22;
+  --color-gray-100: #15141a;
+  --color-gray-05: #fbfbfe;
+  --color-green-30: #4dbc87;
+  --color-green-50: #017a40;
+  --color-green-80: #004725;
+  --color-green-05: #d8eedc;
+  --color-red-30: #f37f98;
+  --color-red-50: #d7264c;
+  --color-red-80: #690f22;
+  --color-red-05: #ffe8e8;
+  --color-yellow-30: #e49c49;
+  --color-yellow-50: #cd411e;
+  --color-yellow-80: #5a3100;
+  --color-yellow-05: #ffebcd;
+  --text-color-prefers-contrast: CanvasText;
+  --text-color-deemphasized-prefers-contrast: inherit;
+  --text-color-brand-light: #15141a;
+  --text-color-brand-dark: #fbfbfe;
+  --text-color-brand-deemphasized-light: color-mix(in srgb, currentColor 69%, transparent);
+  --text-color-brand-deemphasized-dark: color-mix(in srgb, currentColor 75%, transparent);
+  --platform: currentColor;
+}
