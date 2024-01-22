@@ -115,7 +115,6 @@ function formatCSS(src) {
     if (key.trim() && val) {
       return { ...rulesObj, [key.trim()]: val.trim().replace(";", "") };
     }
-
     return rulesObj;
   }, {});
 }
@@ -171,6 +170,26 @@ describe("CSS formats", () => {
         let formattedCSS = formatCSS(output);
         expect(formattedCSS).toStrictEqual(FIXTURE_BY_SURFACE[surface]);
       });
+    });
+  });
+
+  describe("css/variables/brand", () => {
+    it("should produce the expected CSS rules", () => {
+      const output = fs.readFileSync(`${TEST_BUILD_PATH}tokens-brand.css`, {
+        encoding: "UTF-8",
+      });
+      let formattedCSS = formatCSS(output);
+      expect(formattedCSS).toStrictEqual(BRAND_CSS_RULES);
+    });
+  });
+
+  describe("css/variables/platform", () => {
+    it("should produce the expected CSS rules", () => {
+      const output = fs.readFileSync(`${TEST_BUILD_PATH}tokens-platform.css`, {
+        encoding: "UTF-8",
+      });
+      let formattedCSS = formatCSS(output);
+      expect(formattedCSS).toStrictEqual(PLATFORM_CSS_RULES);
     });
   });
 });
