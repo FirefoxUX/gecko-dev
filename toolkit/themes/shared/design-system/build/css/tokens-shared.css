@@ -52,10 +52,10 @@
 
   @media (prefers-contrast) {
     --text-color-deemphasized: inherit;
-    --text-color-default: CanvasText;
     --border-interactive-color-disabled: GrayText;
     --border-interactive-color-active: AccentColor;
     --border-interactive-color-hover: SelectedItem;
+    --text-color-default: CanvasText;
     --border-interactive-color-default: AccentColor;
     --border-color: var(--text-color-default);
   }

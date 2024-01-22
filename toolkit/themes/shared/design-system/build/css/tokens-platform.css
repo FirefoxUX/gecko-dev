@@ -1,0 +1,4 @@
+:root {
+  --text-color-default: currentColor;
+  --border-interactive-color-default: color-mix(in srgb, currentColor 15%, var(--color-gray-60));
+}
