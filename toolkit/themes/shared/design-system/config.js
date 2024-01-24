@@ -24,17 +24,15 @@ module.exports = {
   },
   platforms: {
     css: {
-      transforms: [
-        ...StyleDictionary.transformGroup.css,
-        "lightDarkTransform",
-      ],
+      transforms: [...StyleDictionary.transformGroup.css, "lightDarkTransform"],
       buildPath: "build/css/",
       files: [
         {
-          destination: "light-dark.css",
+          destination: "tokens-shared.css",
           format: "css/variables",
           options: {
             outputReferences: true,
+            showFileHeader: false,
           },
         },
       ],
