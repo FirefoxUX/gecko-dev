@@ -3,12 +3,17 @@
   "version": "1.0.0",
   "description": "## What are design tokens?",
   "main": "index.js",
+  "eslintConfig": {
+    "jest/globals": true
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --testPathPattern=tests",
+    "build": "style-dictionary build"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "jest": "^29.7.0",
     "style-dictionary": "^3.9.1"
   }
 }
