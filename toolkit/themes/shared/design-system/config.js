@@ -21,7 +21,7 @@ module.exports = {
       type: "value",
       transitive: true,
       name: "lightDarkTransform",
-      matcher: token => token.original.value && token.original.dark,
+      matcher: token => token.original.value.light && token.original.value.dark,
       transformer: token => {
         return `light-dark(${token.original.value.light}, ${token.original.value.dark})`;
       },

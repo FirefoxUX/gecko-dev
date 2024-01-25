@@ -121,14 +121,12 @@
         "value": {
           "light": "{color.green.05}",
           "dark": "{color.yellow.80}"
-
         }
       },
       "warning": {
         "value": {
           "light": "{color.yellow.05}",
           "dark": "{color.blue.80}"
-
         }
       }
     }
