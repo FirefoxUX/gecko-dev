@@ -1,39 +1,5 @@
 {
   "color": {
-    "background": {
-      "critical": {
-        "light": {
-          "value": "{color.red.05}"
-        },
-        "dark": {
-          "value": "{color.red.80}"
-        }
-      },
-      "information": {
-        "light": {
-          "value": "{color.blue.05}"
-        },
-        "dark": {
-          "value": "{color.blue.80}"
-        }
-      },
-      "success": {
-        "light": {
-          "value": "{color.green.05}"
-        },
-        "dark": {
-          "value": "{color.yellow.80}"
-        }
-      },
-      "warning": {
-        "light": {
-          "value": "{color.yellow.05}"
-        },
-        "dark": {
-          "value": "{color.blue.80}"
-        }
-      }
-    },
     "black": {
       "a10": {
         "value": "rgba(0,0,0,0.1)"
@@ -135,40 +101,42 @@
         "value": "#5a3100"
       }
     },
-    "white": "#ffffff"
-  },
-  "text": {
-    "color": {
-      "prefers-contrast": {
-        "value": "CanvasText"
+    "white": {
+      "value": "#ffffff"
+    },
+    "background": {
+      "critical": {
+        "value": "{color.red.05}",
+        "dark": "{color.red.80}"
       },
-      "deemphasized": {
-        "prefers-contrast": {
-          "value": "inherit"
-        }
+      "information": {
+        "value": "{color.blue.05}",
+        "dark": "{color.blue.80}"
       },
-      "brand": {
-        "light": {
-          "value": "{color.gray.100}"
-        },
-        "dark": {
-          "value": "{color.gray.05}"
-        },
-        "deemphasized": {
-          "light": {
-            "value": "color-mix(in srgb, currentColor 69%, transparent)"
-          },
-          "dark": {
-            "value": "color-mix(in srgb, currentColor 75%, transparent)"
-          }
-        }
+      "success": {
+        "value": "{color.green.05}",
+        "dark": "{color.yellow.80}"
+      },
+      "warning": {
+        "value": "{color.yellow.05}",
+        "dark": "{color.blue.80}"
       }
     }
   },
-  "platform": {
-    "value": "currentColor",
+  "text": {
+    "color": {
+      "value": "CanvasText"
+    },
+    "brand": {
+      "value": "{color.gray.100}",
+      "dark": "{color.gray.05}"
+    },
+    "platform": {
+      "value": "currentColor"
+    },
     "deemphasized": {
-      "value": "color-mix(in srgb, currentColor 60%, transparent)"
+      "value": "color-mix(in srgb, currentColor 60%, transparent)",
+      "prefersContrastValue": "inherit"
     }
   }
 }
