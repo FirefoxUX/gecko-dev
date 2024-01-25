@@ -106,20 +106,28 @@
     },
     "background": {
       "critical": {
-        "value": "{color.red.05}",
-        "dark": "{color.red.80}"
+        "value": {
+          "light": "{color.red.05}",
+          "dark": "{color.red.80}"
+        }
       },
       "information": {
-        "value": "{color.blue.05}",
-        "dark": "{color.blue.80}"
+        "value": {
+          "light": "{color.blue.05}",
+          "dark": "{color.blue.80}"
+        }
       },
       "success": {
-        "value": "{color.green.05}",
-        "dark": "{color.yellow.80}"
+        "value": {
+          "light": "{color.green.05}",
+          "dark": "{color.yellow.80}"
+        }
       },
       "warning": {
-        "value": "{color.yellow.05}",
-        "dark": "{color.blue.80}"
+        "value": {
+          "light": "{color.yellow.05}",
+          "dark": "{color.blue.80}"
+        }
       }
     }
   },
@@ -128,15 +136,19 @@
       "value": "CanvasText"
     },
     "brand": {
-      "value": "{color.gray.100}",
-      "dark": "{color.gray.05}"
+      "value": {
+        "light": "{color.gray.100}",
+        "dark": "{color.gray.05}"
+      }
     },
     "platform": {
       "value": "currentColor"
     },
     "deemphasized": {
-      "value": "color-mix(in srgb, currentColor 60%, transparent)",
-      "prefersContrastValue": "inherit"
+      "value": {
+        "default": "color-mix(in srgb, currentColor 60%, transparent)",
+        "prefersContrast": "inherit"
+      }
     }
   }
 }
