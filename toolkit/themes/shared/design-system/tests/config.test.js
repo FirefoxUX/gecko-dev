@@ -51,7 +51,7 @@ const BASE_CSS_RULES = {
   "--border-radius-circle": "9999px",
   "--border-radius-small": "4px",
   "--border-radius-medium": "8px",
-  "--border-width-default": "1px",
+  "--border-width": "1px",
 };
 
 const PREFERS_CONTRAST_CSS_RULES = {
@@ -61,7 +61,7 @@ const PREFERS_CONTRAST_CSS_RULES = {
   "--border-interactive-color-active": "AccentColor",
   "--border-interactive-color-hover": "SelectedItem",
   "--border-interactive-color-default": "AccentColor",
-  "--border-color-default": "var(--text-color-default)",
+  "--border-color": "var(--text-color-default)",
 };
 
 const FORCED_COLORS_CSS_RULES = {
