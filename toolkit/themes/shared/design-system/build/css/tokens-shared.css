@@ -1,7 +1,5 @@
 :root {
-  --text-deemphasized: color-mix(in srgb, currentColor 60%, transparent);
-  --text-platform: currentColor;
-  --text-color: CanvasText;
+  --text-color-deemphasized: color-mix(in srgb, currentColor 60%, transparent);
   --color-white: #ffffff;
   --color-yellow-05: #ffebcd;
   --color-yellow-80: #5a3100;
@@ -32,9 +30,33 @@
   --color-blue-50: #0060df;
   --color-blue-30: #73a7f3;
   --color-black-a10: rgba(0, 0, 0, 0.1);
-  --text-brand: light-dark(var(--color-gray-100), var(--color-gray-05));
+  --border-width: 1px;
+  --border-radius-medium: 8px;
+  --border-radius-small: 4px;
+  --border-radius-circle: 9999px;
   --color-background-warning: light-dark(var(--color-yellow-05), var(--color-blue-80));
   --color-background-success: light-dark(var(--color-green-05), var(--color-yellow-80));
   --color-background-information: light-dark(var(--color-blue-05), var(--color-blue-80));
   --color-background-critical: light-dark(var(--color-red-05), var(--color-red-80));
+}
+
+@media (prefers-contrast) {
+  :root {
+    --text-color-deemphasized: inherit;
+    --text-color-default: CanvasText;
+    --border-interactive-color-disabled: GrayText;
+    --border-interactive-color-active: AccentColor;
+    --border-interactive-color-hover: SelectedItem;
+    --border-interactive-color-default: AccentColor;
+    --border-color: var(--text-color-default);
+  }
+}
+
+@media (forced-colors) {
+  :root {
+    --border-interactive-color-disabled: GrayText;
+    --border-interactive-color-active: ButtonText;
+    --border-interactive-color-hover: ButtonText;
+    --border-interactive-color-default: ButtonText;
+  }
 }
