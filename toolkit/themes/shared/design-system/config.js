@@ -62,13 +62,17 @@ function formatTokens({ mediaQuery, args }) {
     format: "css",
     dictionary,
     outputReferences: args.options.outputReferences,
+    formatting: {
+      indentation: mediaQuery ? "    " : "  ",
+    },
   });
 
+  // Weird spacing below is unfortunately necessary formatting the built CSS.
   if (mediaQuery) {
     return `
 @media (${mediaQuery}) {
   :root {
-  ${formattedVars.split("\n").join(`\n  `)}
+${formattedVars}
   }
 }
 `;

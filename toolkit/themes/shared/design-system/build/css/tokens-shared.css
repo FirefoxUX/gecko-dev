@@ -30,7 +30,7 @@
   --color-blue-50: #0060df;
   --color-blue-30: #73a7f3;
   --color-black-a10: rgba(0, 0, 0, 0.1);
-  --border-width-default: 1px;
+  --border-width: 1px;
   --border-radius-medium: 8px;
   --border-radius-small: 4px;
   --border-radius-circle: 9999px;
@@ -48,7 +48,7 @@
     --border-interactive-color-active: AccentColor;
     --border-interactive-color-hover: SelectedItem;
     --border-interactive-color-default: AccentColor;
-    --border-color-default: var(--text-color-default);
+    --border-color: var(--text-color-default);
   }
 }
 
