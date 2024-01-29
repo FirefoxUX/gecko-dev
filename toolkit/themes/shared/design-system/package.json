@@ -7,7 +7,7 @@
     "jest/globals": true
   },
   "scripts": {
-    "test": "jest --testPathPattern=tests",
+    "test": "jest --testPathPattern=tests --silent",
     "build": "style-dictionary build"
   },
   "author": "",
