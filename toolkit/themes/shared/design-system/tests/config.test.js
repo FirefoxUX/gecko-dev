@@ -7,11 +7,15 @@ const config = require("../config");
 
 const TEST_BUILD_PATH = "tests/build/css/";
 
-const EXPECTED_CSS_RULES = {
-  "--color-background-critical": "light-dark(var(--color-red-05), var(--color-red-80))",
-  "--color-background-information": "light-dark(var(--color-blue-05), var(--color-blue-80))",
-  "--color-background-success": "light-dark(var(--color-green-05), var(--color-yellow-80))",
-  "--color-background-warning": "light-dark(var(--color-yellow-05), var(--color-blue-80))",
+const BASE_CSS_RULES = {
+  "--color-background-critical":
+    "light-dark(var(--color-red-05), var(--color-red-80))",
+  "--color-background-information":
+    "light-dark(var(--color-blue-05), var(--color-blue-80))",
+  "--color-background-success":
+    "light-dark(var(--color-green-05), var(--color-yellow-80))",
+  "--color-background-warning":
+    "light-dark(var(--color-yellow-05), var(--color-blue-80))",
   "--color-black-a10": "rgba(0, 0, 0, 0.1)",
   "--color-blue-05": "#deeafc",
   "--color-blue-30": "#73a7f3",
@@ -42,10 +46,35 @@ const EXPECTED_CSS_RULES = {
   "--color-yellow-30": "#e49c49",
   "--color-yellow-50": "#cd411e",
   "--color-yellow-80": "#5a3100",
-  "--text-brand": "light-dark(var(--color-gray-100), var(--color-gray-05))",
-  "--text-color": "CanvasText",
-  "--text-deemphasized": "color-mix(in srgb, currentColor 60%, transparent)",
-  "--text-platform": "currentColor",
+  "--text-color-deemphasized":
+    "color-mix(in srgb, currentColor 60%, transparent)",
+  "--border-radius-circle": "9999px",
+  "--border-radius-small": "4px",
+  "--border-radius-medium": "8px",
+  "--border-width": "1px",
+};
+
+const PREFERS_CONTRAST_CSS_RULES = {
+  "--text-color-deemphasized": "inherit",
+  "--text-color-default": "CanvasText",
+  "--border-interactive-color-disabled": "GrayText",
+  "--border-interactive-color-active": "AccentColor",
+  "--border-interactive-color-hover": "SelectedItem",
+  "--border-interactive-color-default": "AccentColor",
+  "--border-color": "var(--text-color-default)",
+};
+
+const FORCED_COLORS_CSS_RULES = {
+  "--border-interactive-color-disabled": "GrayText",
+  "--border-interactive-color-active": "ButtonText",
+  "--border-interactive-color-hover": "ButtonText",
+  "--border-interactive-color-default": "ButtonText",
+};
+
+const FIXTURE_BY_QUERY = {
+  base: BASE_CSS_RULES,
+  "prefers-contrast": PREFERS_CONTRAST_CSS_RULES,
+  "forced-colors": FORCED_COLORS_CSS_RULES,
 };
 
 // Use our real config, just modify some values for the test.
@@ -56,21 +85,36 @@ testConfig.platforms.css.buildPath = TEST_BUILD_PATH;
 describe("generated CSS", () => {
   StyleDictionary.extend(testConfig).buildAllPlatforms();
 
-  describe("css/variables", () => {
+  describe("css/variables/hcm format", () => {
     const output = fs.readFileSync(`${TEST_BUILD_PATH}tokens-shared.css`, {
       encoding: "UTF-8",
     });
-    
-    it("should produce the expected CSS", () => {
-      let formattedCSS = output.split("\n").reduce((rulesObj, rule) => {
-        let [key, val] = rule.split(":");
-        if (key && val) {
-          return { ...rulesObj, [key.trim()]: val.trim().replace(";", "") };
-        }
-        return rulesObj;
-      }, {});
 
-      expect(formattedCSS).toMatchObject(EXPECTED_CSS_RULES);
+    let rulesByMediaQuery = output.split("@media");
+
+    it("should contain three blocks of CSS, including media queries", () => {
+      expect(rulesByMediaQuery.length).toBe(3);
+      expect(rulesByMediaQuery[1]).toEqual(
+        expect.stringContaining("prefers-contrast")
+      );
+      expect(rulesByMediaQuery[2]).toEqual(
+        expect.stringContaining("forced-colors")
+      );
+    });
+
+    rulesByMediaQuery.forEach(ruleSet => {
+      let queryName = ruleSet.trim().match(/(?<=\().+?(?=\) \{)/) || "base";
+      it(`should produce the expected ${queryName} CSS rules`, () => {
+        let formattedCSS = ruleSet.split("\n").reduce((rulesObj, rule) => {
+          let [key, val] = rule.split(":");
+          if (key.trim() && val) {
+            return { ...rulesObj, [key.trim()]: val.trim().replace(";", "") };
+          }
+          return rulesObj;
+        }, {});
+
+        expect(formattedCSS).toStrictEqual(FIXTURE_BY_QUERY[queryName]);
+      });
     });
   });
 });
