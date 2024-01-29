@@ -110,6 +110,11 @@ let commentHeader = [
 ];
 
 module.exports = {
+  fileHeader: {
+    defaultHeader: () => {
+      return [...licenseHeader, "", ...commentHeader]
+    },
+  },
   source: ["design-tokens.json"],
   transform: {
     defaultTransform: {
@@ -144,6 +149,10 @@ module.exports = {
         "defaultTransform",
       ],
       buildPath: "build/css/",
+      options: {
+        fileHeader: "defaultHeader",
+        outputReferences: true,
+      },
       files: [
         {
           destination: "tokens-shared.css",
