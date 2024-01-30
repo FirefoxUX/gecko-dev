@@ -10,11 +10,15 @@ const { formattedVariables } = StyleDictionary.formatHelpers;
 /**
  * Adds the Mozilla Public License header in one comment and
  * how to make changes in the generated output files via the
- * design-tokens.json file in another comment.
+ * design-tokens.json file in another comment. Also imports
+ * tokens-shared.css when applicable.
  *
+ * @param {string} surface
+ *  Desktop surface, either "brand", "platform". Determines 
+ *  whether or not we need to import tokens-shared.css.
  * @return {String} Formatted comment header string
  */
-let customFileHeader = () => {
+let customFileHeader = surface => {
   let licenseString = [
     "/**",
     " * This Source Code Form is subject to the terms of the Mozilla Public",
@@ -29,7 +33,12 @@ let customFileHeader = () => {
     " * and run `npm run build` to see your changes.",
     " */",
   ].join("\n");
-  return [licenseString + "\n\n" + commentString + "\n\n"];
+
+  let cssImport = surface
+    ? `@import url("chrome://global/skin/design-system/tokens-shared.css");\n\n`
+    : "";
+
+  return [licenseString + "\n\n" + commentString + "\n\n" + cssImport];
 };
 
 const MEDIA_QUERY_PROPERTY_MAP = {
@@ -127,10 +136,10 @@ ${formattedVars}
 
 /**
  * Finds the original value of a token for a given media query and surface.
- * 
+ *
  * @param {object} token - Token object parsed by style-dictionary.
- * @param {string} prop - Name of the property we're querying for. 
- * @param {string} surface 
+ * @param {string} prop - Name of the property we're querying for.
+ * @param {string} surface
  *  The desktop surface we're generating CSS for, either "brand" or "platform".
  * @returns {string} The original token value based on our parameters.
  */
@@ -150,7 +159,7 @@ function getOriginalTokenValue(token, prop, surface) {
  * @param {object} token - Token object parsed from JSON by style-dictionary.
  * @param {string} originalVal
  *  Original value of the token for the combination of surface and media query.
- * @param {object} dictionary 
+ * @param {object} dictionary
  *  Object of transformed tokens and helper fns provided by style-dictionary.
  * @returns {object} Token object with an updated value.
  */
@@ -165,10 +174,10 @@ function transformTokenValue(token, originalVal, dictionary) {
 }
 
 /**
- * Creates a light-dark transformed that works for a given surface. Registers
+ * Creates a light-dark transform that works for a given surface. Registers
  * the transform with style-dictionary and returns the transform's name.
  *
- * @param {string} surface 
+ * @param {string} surface
  *  The desktop surface we're generating CSS for, either "brand", "platform",
  *  or "shared".
  * @returns {string} Name of the transform that was registered.
@@ -191,7 +200,7 @@ const createLightDarkTransform = surface => {
 
 /**
  * Determines the correct matcher function to use for a given surface.
- * 
+ *
  * @param {string} surface - Desktop surface, either "brand", "platform", or "shared".
  * @returns {function}
  *  Matcher function for determining if a token's value needs to undergo
@@ -209,9 +218,9 @@ function getMatcher(surface) {
 /**
  * Determines the correct transformer function to use for a given surface.
  *
- * @param {string} surface - Desktop surface, either "brand", "platform", or
- * "shared".
- * @returns {function} 
+ * @param {string} surface
+ *  Desktop surface, either "brand", "platform", or "shared".
+ * @returns {function}
  *  Transform function that uses the token's original value to create a new
  *  "default" light-dark value and updates the original value object.
  */
@@ -239,6 +248,10 @@ module.exports = {
   },
   platforms: {
     css: {
+      options: {
+        outputReferences: true,
+        showFileHeader: false,
+      },
       transforms: [
         ...StyleDictionary.transformGroup.css,
         ...["shared", "platform", "brand"].map(createLightDarkTransform),
@@ -248,10 +261,6 @@ module.exports = {
         {
           destination: "tokens-shared.css",
           format: "css/variables/shared",
-          options: {
-            outputReferences: true,
-            showFileHeader: false,
-          },
         },
         {
           destination: "tokens-brand.css",
@@ -259,10 +268,6 @@ module.exports = {
           filter: token =>
             typeof token.original.value == "object" &&
             token.original.value.brand,
-          options: {
-            outputReferences: true,
-            showFileHeader: false,
-          },
         },
         {
           destination: "tokens-platform.css",
@@ -270,9 +275,6 @@ module.exports = {
           filter: token =>
             typeof token.original.value == "object" &&
             token.original.value.platform,
-          options: {
-            outputReferences: true,
-          },
         },
       ],
     },

@@ -56,19 +56,19 @@ const SHARED_CSS_RULES = {
 
 const SHARED_PREFERS_CONTRAST_CSS_RULES = {
   "--text-color-deemphasized": "inherit",
-  "--text-color": "CanvasText",
+  "--text-color-default": "CanvasText",
   "--border-interactive-color-disabled": "GrayText",
   "--border-interactive-color-active": "AccentColor",
   "--border-interactive-color-hover": "SelectedItem",
-  "--border-interactive-color": "AccentColor",
-  "--border-color": "var(--text-color)",
+  "--border-interactive-color-default": "AccentColor",
+  "--border-color": "var(--text-color-default)",
 };
 
 const SHARED_FORCED_COLORS_CSS_RULES = {
   "--border-interactive-color-disabled": "GrayText",
   "--border-interactive-color-active": "ButtonText",
   "--border-interactive-color-hover": "ButtonText",
-  "--border-interactive-color": "ButtonText",
+  "--border-interactive-color-default": "ButtonText",
 };
 
 const BRAND_CSS_RULES = {
@@ -92,6 +92,11 @@ const SHARED_FIXTURE_BY_QUERY = {
   "forced-colors": SHARED_FORCED_COLORS_CSS_RULES,
 };
 
+const FIXTURE_BY_SURFACE = {
+  brand: BRAND_CSS_RULES,
+  platform: PLATFORM_CSS_RULES,
+};
+
 // Comment regex copied and slightly adapted from:
 // https://blog.ostermiller.org/finding-comments-in-source-code-using-regular-expressions/
 const COMMENT_REGEX = /(?:\*|\/\/)([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*/;
@@ -103,10 +108,15 @@ testConfig.platforms.css.buildPath = TEST_BUILD_PATH;
 
 function formatCSS(src) {
   return src.split("\n").reduce((rulesObj, rule) => {
+    if (rule.match(COMMENT_REGEX)) {
+      return rulesObj;
+    }
+
     let [key, val] = rule.split(":");
     if (key.trim() && val) {
       return { ...rulesObj, [key.trim()]: val.trim().replace(";", "") };
     }
+
     return rulesObj;
   }, {});
 }
@@ -140,23 +150,27 @@ describe("CSS formats", () => {
     });
   });
 
-  describe("css/variables/brand", () => {
-    it("should produce the expected CSS rules", () => {
-      const output = fs.readFileSync(`${TEST_BUILD_PATH}tokens-brand.css`, {
-        encoding: "UTF-8",
-      });
-      let formattedCSS = formatCSS(output);
-      expect(formattedCSS).toStrictEqual(BRAND_CSS_RULES);
-    });
-  });
+  ["brand", "platform"].forEach(surface => {
+    describe(`css/variables/${surface}`, () => {
+      const output = fs.readFileSync(
+        `${TEST_BUILD_PATH}tokens-${surface}.css`,
+        {
+          encoding: "UTF-8",
+        }
+      );
 
-  describe("css/variables/platform", () => {
-    it("should produce the expected CSS rules", () => {
-      const output = fs.readFileSync(`${TEST_BUILD_PATH}tokens-platform.css`, {
-        encoding: "UTF-8",
+      it("should @import tokens-shared.css", () => {
+        expect(
+          output.includes(
+            '@import url("chrome://global/skin/design-system/tokens-shared.css")'
+          )
+        ).toBe(true);
       });
-      let formattedCSS = formatCSS(output);
-      expect(formattedCSS).toStrictEqual(PLATFORM_CSS_RULES);
+
+      it("should produce the expected CSS rules", () => {
+        let formattedCSS = formatCSS(output);
+        expect(formattedCSS).toStrictEqual(FIXTURE_BY_SURFACE[surface]);
+      });
     });
   });
 });
