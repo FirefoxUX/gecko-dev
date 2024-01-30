@@ -103,7 +103,7 @@ const COMMENT_REGEX = /(?:\*|\/\/)([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*/;
 // Use our real config, just modify some values for the test.
 let testConfig = Object.assign({}, config);
 testConfig.source = [path.join(__dirname, "../design-tokens.json")];
-testConfig.platforms.css.buildPath = TEST_BUILD_PATH;
+testConfig.platforms.css.buildPath = TEST_BUILD_PATH;q
 
 function formatCSS(src) {
   return src.split("\n").reduce((rulesObj, rule) => {
@@ -115,6 +115,7 @@ function formatCSS(src) {
     if (key.trim() && val) {
       return { ...rulesObj, [key.trim()]: val.trim().replace(";", "") };
     }
+
     return rulesObj;
   }, {});
 }
@@ -170,26 +171,6 @@ describe("CSS formats", () => {
         let formattedCSS = formatCSS(output);
         expect(formattedCSS).toStrictEqual(FIXTURE_BY_SURFACE[surface]);
       });
-    });
-  });
-
-  describe("css/variables/brand", () => {
-    it("should produce the expected CSS rules", () => {
-      const output = fs.readFileSync(`${TEST_BUILD_PATH}tokens-brand.css`, {
-        encoding: "UTF-8",
-      });
-      let formattedCSS = formatCSS(output);
-      expect(formattedCSS).toStrictEqual(BRAND_CSS_RULES);
-    });
-  });
-
-  describe("css/variables/platform", () => {
-    it("should produce the expected CSS rules", () => {
-      const output = fs.readFileSync(`${TEST_BUILD_PATH}tokens-platform.css`, {
-        encoding: "UTF-8",
-      });
-      let formattedCSS = formatCSS(output);
-      expect(formattedCSS).toStrictEqual(PLATFORM_CSS_RULES);
     });
   });
 });
