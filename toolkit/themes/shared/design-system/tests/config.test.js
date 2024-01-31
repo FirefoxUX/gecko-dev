@@ -56,19 +56,19 @@ const BASE_CSS_RULES = {
 
 const PREFERS_CONTRAST_CSS_RULES = {
   "--text-color-deemphasized": "inherit",
-  "--text-color-default": "CanvasText",
+  "--text-color": "CanvasText",
   "--border-interactive-color-disabled": "GrayText",
   "--border-interactive-color-active": "AccentColor",
   "--border-interactive-color-hover": "SelectedItem",
-  "--border-interactive-color-default": "AccentColor",
-  "--border-color": "var(--text-color-default)",
+  "--border-interactive-color": "AccentColor",
+  "--border-color": "var(--text-color)",
 };
 
 const FORCED_COLORS_CSS_RULES = {
   "--border-interactive-color-disabled": "GrayText",
   "--border-interactive-color-active": "ButtonText",
   "--border-interactive-color-hover": "ButtonText",
-  "--border-interactive-color-default": "ButtonText",
+  "--border-interactive-color": "ButtonText",
 };
 
 const FIXTURE_BY_QUERY = {
