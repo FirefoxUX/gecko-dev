@@ -53,7 +53,7 @@ function hcmFormatter(args) {
     formatTokens({ args }) +
     formatTokens({ mediaQuery: "prefers-contrast", args }) +
     formatTokens({ mediaQuery: "forced-colors", args })
-  ).replaceAll("-default", "");
+  ).replaceAll(/(?<tokenName>\w+)-base(?=\b)/g, "$<tokenName>");
 }
 
 /**
