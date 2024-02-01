@@ -77,6 +77,10 @@ const FIXTURE_BY_QUERY = {
   "forced-colors": FORCED_COLORS_CSS_RULES,
 };
 
+// Comment regex copied and slightly adapted from:
+// https://blog.ostermiller.org/finding-comments-in-source-code-using-regular-expressions/
+const COMMENT_REGEX = /(?:\*|\/\/)([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*/;
+
 // Use our real config, just modify some values for the test.
 let testConfig = Object.assign({}, config);
 testConfig.source = [path.join(__dirname, "../design-tokens.json")];
@@ -106,6 +110,9 @@ describe("generated CSS", () => {
       let queryName = ruleSet.trim().match(/(?<=\().+?(?=\) \{)/) || "base";
       it(`should produce the expected ${queryName} CSS rules`, () => {
         let formattedCSS = ruleSet.split("\n").reduce((rulesObj, rule) => {
+          if (rule.match(COMMENT_REGEX)) {
+            return rulesObj;
+          }
           let [key, val] = rule.split(":");
           if (key.trim() && val) {
             return { ...rulesObj, [key.trim()]: val.trim().replace(";", "") };
