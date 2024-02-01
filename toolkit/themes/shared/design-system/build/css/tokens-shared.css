@@ -49,10 +49,8 @@
   --color-background-success: light-dark(var(--color-green-05), var(--color-yellow-80));
   --color-background-information: light-dark(var(--color-blue-05), var(--color-blue-80));
   --color-background-critical: light-dark(var(--color-red-05), var(--color-red-80));
-}
 
-@media (prefers-contrast) {
-  :root {
+  @media (prefers-contrast) {
     --text-color-deemphasized: inherit;
     --text-color-default: CanvasText;
     --border-interactive-color-disabled: GrayText;
@@ -61,10 +59,8 @@
     --border-interactive-color-default: AccentColor;
     --border-color: var(--text-color-default);
   }
-}
 
-@media (forced-colors) {
-  :root {
+  @media (forced-colors) {
     --border-interactive-color-disabled: GrayText;
     --border-interactive-color-active: ButtonText;
     --border-interactive-color-hover: ButtonText;

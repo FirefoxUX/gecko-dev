@@ -50,9 +50,11 @@ const MEDIA_QUERY_PROPERTY_MAP = {
 function hcmFormatter(args) {
   return (
     customFileHeader() +
+    ":root {\n" +
     formatTokens({ args }) +
     formatTokens({ mediaQuery: "prefers-contrast", args }) +
-    formatTokens({ mediaQuery: "forced-colors", args })
+    formatTokens({ mediaQuery: "forced-colors", args }) +
+    "}\n"
   ).replaceAll(/(?<tokenName>\w+)-base(?=\b)/g, "$<tokenName>");
 }
 
@@ -96,15 +98,13 @@ function formatTokens({ mediaQuery, args }) {
   // Weird spacing below is unfortunately necessary formatting the built CSS.
   if (mediaQuery) {
     return `
-@media (${mediaQuery}) {
-  :root {
+  @media (${mediaQuery}) {
 ${formattedVars}
   }
-}
 `;
   }
-
-  return `:root {\n${formattedVars}\n}\n`;
+  return formattedVars + "\n";
+  
 }
 
 /**
