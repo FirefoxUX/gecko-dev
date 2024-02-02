@@ -2,12 +2,12 @@
   "border": {
     "color": {
       "value": {
-        "prefersContrast": "{text.color.default}"
+        "prefersContrast": "{text.color.@base}"
       }
     },
     "interactive": {
       "color": {
-        "default": {
+        "@base": {
           "value": {
             "prefersContrast": "AccentColor",
             "forcedColors": "ButtonText"
@@ -182,7 +182,7 @@
   },
   "text": {
     "color": {
-      "default": {
+      "@base": {
         "value": {
           "prefersContrast": "CanvasText"
         }
