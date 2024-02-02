@@ -56,19 +56,19 @@ const BASE_CSS_RULES = {
 
 const PREFERS_CONTRAST_CSS_RULES = {
   "--text-color-deemphasized": "inherit",
-  "--text-color-default": "CanvasText",
+  "--text-color": "CanvasText",
   "--border-interactive-color-disabled": "GrayText",
   "--border-interactive-color-active": "AccentColor",
   "--border-interactive-color-hover": "SelectedItem",
-  "--border-interactive-color-default": "AccentColor",
-  "--border-color": "var(--text-color-default)",
+  "--border-interactive-color": "AccentColor",
+  "--border-color": "var(--text-color)",
 };
 
 const FORCED_COLORS_CSS_RULES = {
   "--border-interactive-color-disabled": "GrayText",
   "--border-interactive-color-active": "ButtonText",
   "--border-interactive-color-hover": "ButtonText",
-  "--border-interactive-color-default": "ButtonText",
+  "--border-interactive-color": "ButtonText",
 };
 
 const FIXTURE_BY_QUERY = {
@@ -76,6 +76,10 @@ const FIXTURE_BY_QUERY = {
   "prefers-contrast": PREFERS_CONTRAST_CSS_RULES,
   "forced-colors": FORCED_COLORS_CSS_RULES,
 };
+
+// Comment regex copied and slightly adapted from:
+// https://blog.ostermiller.org/finding-comments-in-source-code-using-regular-expressions/
+const COMMENT_REGEX = /(?:\*|\/\/)([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*/;
 
 // Use our real config, just modify some values for the test.
 let testConfig = Object.assign({}, config);
@@ -106,6 +110,9 @@ describe("generated CSS", () => {
       let queryName = ruleSet.trim().match(/(?<=\().+?(?=\) \{)/) || "base";
       it(`should produce the expected ${queryName} CSS rules`, () => {
         let formattedCSS = ruleSet.split("\n").reduce((rulesObj, rule) => {
+          if (rule.match(COMMENT_REGEX)) {
+            return rulesObj;
+          }
           let [key, val] = rule.split(":");
           if (key.trim() && val) {
             return { ...rulesObj, [key.trim()]: val.trim().replace(";", "") };
