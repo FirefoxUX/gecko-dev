@@ -56,34 +56,34 @@ const SHARED_CSS_RULES = {
 
 const SHARED_PREFERS_CONTRAST_CSS_RULES = {
   "--text-color-deemphasized": "inherit",
-  "--text-color-default": "CanvasText",
+  "--text-color": "CanvasText",
   "--border-interactive-color-disabled": "GrayText",
   "--border-interactive-color-active": "AccentColor",
   "--border-interactive-color-hover": "SelectedItem",
-  "--border-interactive-color-default": "AccentColor",
-  "--border-color": "var(--text-color-default)",
+  "--border-interactive-color": "AccentColor",
+  "--border-color": "var(--text-color)",
 };
 
 const SHARED_FORCED_COLORS_CSS_RULES = {
   "--border-interactive-color-disabled": "GrayText",
   "--border-interactive-color-active": "ButtonText",
   "--border-interactive-color-hover": "ButtonText",
-  "--border-interactive-color-default": "ButtonText",
+  "--border-interactive-color": "ButtonText",
 };
 
 const BRAND_CSS_RULES = {
-  "--border-interactive-color-default":
+  "--border-interactive-color":
     "light-dark(var(--color-gray-60), var(--color-gray-50))",
-  "--text-color-default":
+  "--text-color":
     "light-dark(var(--color-gray-100), var(--color-gray-05))",
   "--text-color-deemphasized":
     "light-dark(color-mix(in srgb, currentColor 69%, transparent), color-mix(in srgb, currentColor 75%, transparent))",
 };
 
 const PLATFORM_CSS_RULES = {
-  "--border-interactive-color-default":
+  "--border-interactive-color":
     "color-mix(in srgb, currentColor 15%, var(--color-gray-60))",
-  "--text-color-default": "currentColor",
+  "--text-color": "currentColor",
 };
 
 const SHARED_FIXTURE_BY_QUERY = {

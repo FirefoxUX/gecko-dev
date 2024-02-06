@@ -59,7 +59,7 @@ const MEDIA_QUERY_PROPERTY_MAP = {
  */
 const createDesktopFormat = surface => args => {
   return (
-    customFileHeader() +
+    customFileHeader(surface) +
     ":root {\n" +
     formatTokens({
       surface,

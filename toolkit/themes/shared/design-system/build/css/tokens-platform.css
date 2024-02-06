@@ -12,6 +12,6 @@
 @import url("chrome://global/skin/design-system/tokens-shared.css");
 
 :root {
-  --text-color-default: currentColor;
-  --border-interactive-color-default: color-mix(in srgb, currentColor 15%, var(--color-gray-60));
+  --text-color: currentColor;
+  --border-interactive-color: color-mix(in srgb, currentColor 15%, var(--color-gray-60));
 }

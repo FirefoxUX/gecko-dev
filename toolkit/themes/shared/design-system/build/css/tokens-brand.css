@@ -13,6 +13,6 @@
 
 :root {
   --text-color-deemphasized: light-dark(color-mix(in srgb, currentColor 69%, transparent), color-mix(in srgb, currentColor 75%, transparent));
-  --text-color-default: light-dark(var(--color-gray-100), var(--color-gray-05));
-  --border-interactive-color-default: light-dark(var(--color-gray-60), var(--color-gray-50));
+  --text-color: light-dark(var(--color-gray-100), var(--color-gray-05));
+  --border-interactive-color: light-dark(var(--color-gray-60), var(--color-gray-50));
 }
