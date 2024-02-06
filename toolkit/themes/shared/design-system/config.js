@@ -14,7 +14,7 @@ const { formattedVariables } = StyleDictionary.formatHelpers;
  * tokens-shared.css when applicable.
  *
  * @param {string} surface
- *  Desktop surface, either "brand", "platform". Determines 
+ *  Desktop surface, either "brand", "platform". Determines
  *  whether or not we need to import tokens-shared.css.
  * @return {String} Formatted comment header string
  */
@@ -77,7 +77,7 @@ const createDesktopFormat = surface => args => {
     }) +
     "}\n"
   ).replaceAll(/(?<tokenName>\w+)-base(?=\b)/g, "$<tokenName>");
-}
+};
 
 /**
  * Formats a subset of tokens into CSS. Wraps token CSS in a media query when
@@ -131,7 +131,6 @@ ${formattedVars}
 `;
   }
   return formattedVars + "\n";
-  
 }
 
 /**
@@ -184,8 +183,31 @@ function transformTokenValue(token, originalVal, dictionary) {
  */
 const createLightDarkTransform = surface => {
   let name = `lightDarkTransform/${surface}`;
-  let matcher = getMatcher(surface);
-  let transformer = getTransformer(surface);
+
+  // Matcher function for determining if a token's value needs to undergo
+  // a light-dark transform.
+  let matcher = token => {
+    if (surface != "shared") {
+      return (
+        token.original.value[surface]?.light &&
+        token.original.value[surface]?.dark
+      );
+    }
+    return token.original.value.light && token.original.value.dark;
+  };
+
+  // Function that uses the token's original value to create a new "default"
+  // light-dark value and updates the original value object.
+  let transformer = token => {
+    if (surface != "shared") {
+      let lightDarkVal = `light-dark(${token.original.value[surface].light}, ${token.original.value[surface].dark})`;
+      token.original.value[surface].default = lightDarkVal;
+      return token.value;
+    }
+    let value = `light-dark(${token.original.value.light}, ${token.original.value.dark})`;
+    token.original.value.default = value;
+    return value;
+  };
 
   StyleDictionary.registerTransform({
     type: "value",
@@ -198,46 +220,6 @@ const createLightDarkTransform = surface => {
   return name;
 };
 
-/**
- * Determines the correct matcher function to use for a given surface.
- *
- * @param {string} surface - Desktop surface, either "brand", "platform", or "shared".
- * @returns {function}
- *  Matcher function for determining if a token's value needs to undergo
- *  a light-dark transform.
- */
-function getMatcher(surface) {
-  if (surface != "shared") {
-    return token =>
-      token.original.value[surface]?.light &&
-      token.original.value[surface]?.dark;
-  }
-  return token => token.original.value.light && token.original.value.dark;
-}
-
-/**
- * Determines the correct transformer function to use for a given surface.
- *
- * @param {string} surface
- *  Desktop surface, either "brand", "platform", or "shared".
- * @returns {function}
- *  Transform function that uses the token's original value to create a new
- *  "default" light-dark value and updates the original value object.
- */
-function getTransformer(surface) {
-  if (surface != "shared") {
-    return token => {
-      let lightDarkVal = `light-dark(${token.original.value[surface].light}, ${token.original.value[surface].dark})`;
-      token.original.value[surface].default = lightDarkVal;
-      return token.value;
-    };
-  }
-  return token => {
-    let value = `light-dark(${token.original.value.light}, ${token.original.value.dark})`;
-    token.original.value.default = value;
-    return value;
-  };
-}
 
 module.exports = {
   source: ["design-tokens.json"],
