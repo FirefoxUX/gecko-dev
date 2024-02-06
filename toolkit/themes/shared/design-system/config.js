@@ -7,8 +7,6 @@
 const StyleDictionary = require("style-dictionary");
 const { formattedVariables } = StyleDictionary.formatHelpers;
 
-const BASE_SELECTOR = ":root" + "\n" + ":host(.anonymous-content-host)" + " ";
-
 /**
  * Adds the Mozilla Public License header in one comment and
  * how to make changes in the generated output files via the
@@ -47,6 +45,8 @@ const MEDIA_QUERY_PROPERTY_MAP = {
   "forced-colors": "forcedColors",
   "prefers-contrast": "prefersContrast",
 };
+
+const BASE_SELECTOR = ":root,\n" + ":host(.anonymous-content-host) {\n";
 
 /**
  * Creates a surface-specific formatter. The formatter is used to build
