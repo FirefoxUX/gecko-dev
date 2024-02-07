@@ -46,6 +46,8 @@ const MEDIA_QUERY_PROPERTY_MAP = {
   "prefers-contrast": "prefersContrast",
 };
 
+const BASE_SELECTOR = ":root,\n" + ":host(.anonymous-content-host) {\n";
+
 /**
  * Creates a surface-specific formatter. The formatter is used to build
  * our different CSS files, including "prefers-contrast" and "forced-colors"
@@ -55,12 +57,12 @@ const MEDIA_QUERY_PROPERTY_MAP = {
  * @param {string} surface
  *  Which desktop area we are generating CSS for.
  *  Either "brand" (i.e. in-content) or "platform" (i.e. chrome).
- * @returns {Function}
+ * @returns {Function} - Formatter function that returns a CSS string.
  */
 const createDesktopFormat = surface => args => {
   return (
     customFileHeader(surface) +
-    ":root {\n" +
+    BASE_SELECTOR +
     formatTokens({
       surface,
       args,
