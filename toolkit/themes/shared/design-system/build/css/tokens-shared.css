@@ -9,7 +9,8 @@
  * and run `npm run build` to see your changes.
  */
 
-:root {
+:root,
+:host(.anonymous-content-host) {
   --text-color-deemphasized: color-mix(in srgb, currentColor 60%, transparent);
   --color-white: #ffffff;
   --color-yellow-05: #ffebcd;
