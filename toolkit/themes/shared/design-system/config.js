@@ -14,7 +14,7 @@ const { formattedVariables } = StyleDictionary.formatHelpers;
  * tokens-shared.css when applicable.
  *
  * @param {string} surface
- *  Desktop surface, either "brand", "platform". Determines
+ *  Desktop surface, either "brand" or "platform". Determines
  *  whether or not we need to import tokens-shared.css.
  * @return {String} Formatted comment header string
  */
@@ -219,7 +219,6 @@ const createLightDarkTransform = surface => {
 
   return name;
 };
-
 
 module.exports = {
   source: ["design-tokens.json"],
