@@ -7,7 +7,7 @@ const config = require("../config");
 
 const TEST_BUILD_PATH = "tests/build/css/";
 
-const BASE_CSS_RULES = {
+const SHARED_CSS_RULES = {
   "--color-background-critical":
     "light-dark(var(--color-red-05), var(--color-red-80))",
   "--color-background-information":
@@ -54,7 +54,7 @@ const BASE_CSS_RULES = {
   "--border-width": "1px",
 };
 
-const PREFERS_CONTRAST_CSS_RULES = {
+const SHARED_PREFERS_CONTRAST_CSS_RULES = {
   "--text-color-deemphasized": "inherit",
   "--text-color": "CanvasText",
   "--border-interactive-color-disabled": "GrayText",
@@ -64,17 +64,37 @@ const PREFERS_CONTRAST_CSS_RULES = {
   "--border-color": "var(--text-color)",
 };
 
-const FORCED_COLORS_CSS_RULES = {
+const SHARED_FORCED_COLORS_CSS_RULES = {
   "--border-interactive-color-disabled": "GrayText",
   "--border-interactive-color-active": "ButtonText",
   "--border-interactive-color-hover": "ButtonText",
   "--border-interactive-color": "ButtonText",
 };
 
-const FIXTURE_BY_QUERY = {
-  base: BASE_CSS_RULES,
-  "prefers-contrast": PREFERS_CONTRAST_CSS_RULES,
-  "forced-colors": FORCED_COLORS_CSS_RULES,
+const BRAND_CSS_RULES = {
+  "--border-interactive-color":
+    "light-dark(var(--color-gray-60), var(--color-gray-50))",
+  "--text-color":
+    "light-dark(var(--color-gray-100), var(--color-gray-05))",
+  "--text-color-deemphasized":
+    "light-dark(color-mix(in srgb, currentColor 69%, transparent), color-mix(in srgb, currentColor 75%, transparent))",
+};
+
+const PLATFORM_CSS_RULES = {
+  "--border-interactive-color":
+    "color-mix(in srgb, currentColor 15%, var(--color-gray-60))",
+  "--text-color": "currentColor",
+};
+
+const SHARED_FIXTURE_BY_QUERY = {
+  base: SHARED_CSS_RULES,
+  "prefers-contrast": SHARED_PREFERS_CONTRAST_CSS_RULES,
+  "forced-colors": SHARED_FORCED_COLORS_CSS_RULES,
+};
+
+const FIXTURE_BY_SURFACE = {
+  brand: BRAND_CSS_RULES,
+  platform: PLATFORM_CSS_RULES,
 };
 
 // Comment regex copied and slightly adapted from:
@@ -86,10 +106,25 @@ let testConfig = Object.assign({}, config);
 testConfig.source = [path.join(__dirname, "../design-tokens.json")];
 testConfig.platforms.css.buildPath = TEST_BUILD_PATH;
 
-describe("generated CSS", () => {
+function formatCSS(src) {
+  return src.split("\n").reduce((rulesObj, rule) => {
+    if (rule.match(COMMENT_REGEX)) {
+      return rulesObj;
+    }
+
+    let [key, val] = rule.split(":");
+    if (key.trim() && val) {
+      return { ...rulesObj, [key.trim()]: val.trim().replace(";", "") };
+    }
+
+    return rulesObj;
+  }, {});
+}
+
+describe("CSS formats", () => {
   StyleDictionary.extend(testConfig).buildAllPlatforms();
 
-  describe("css/variables/hcm format", () => {
+  describe("css/variables/shared format", () => {
     const output = fs.readFileSync(`${TEST_BUILD_PATH}tokens-shared.css`, {
       encoding: "UTF-8",
     });
@@ -109,18 +144,32 @@ describe("generated CSS", () => {
     rulesByMediaQuery.forEach(ruleSet => {
       let queryName = ruleSet.trim().match(/(?<=\().+?(?=\) \{)/) || "base";
       it(`should produce the expected ${queryName} CSS rules`, () => {
-        let formattedCSS = ruleSet.split("\n").reduce((rulesObj, rule) => {
-          if (rule.match(COMMENT_REGEX)) {
-            return rulesObj;
-          }
-          let [key, val] = rule.split(":");
-          if (key.trim() && val) {
-            return { ...rulesObj, [key.trim()]: val.trim().replace(";", "") };
-          }
-          return rulesObj;
-        }, {});
+        let formattedCSS = formatCSS(ruleSet);
+        expect(formattedCSS).toStrictEqual(SHARED_FIXTURE_BY_QUERY[queryName]);
+      });
+    });
+  });
 
-        expect(formattedCSS).toStrictEqual(FIXTURE_BY_QUERY[queryName]);
+  ["brand", "platform"].forEach(surface => {
+    describe(`css/variables/${surface}`, () => {
+      const output = fs.readFileSync(
+        `${TEST_BUILD_PATH}tokens-${surface}.css`,
+        {
+          encoding: "UTF-8",
+        }
+      );
+
+      it("should @import tokens-shared.css", () => {
+        expect(
+          output.includes(
+            '@import url("chrome://global/skin/design-system/tokens-shared.css")'
+          )
+        ).toBe(true);
+      });
+
+      it("should produce the expected CSS rules", () => {
+        let formattedCSS = formatCSS(output);
+        expect(formattedCSS).toStrictEqual(FIXTURE_BY_SURFACE[surface]);
       });
     });
   });

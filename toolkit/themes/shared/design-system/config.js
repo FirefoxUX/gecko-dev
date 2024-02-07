@@ -10,11 +10,15 @@ const { formattedVariables } = StyleDictionary.formatHelpers;
 /**
  * Adds the Mozilla Public License header in one comment and
  * how to make changes in the generated output files via the
- * design-tokens.json file in another comment.
+ * design-tokens.json file in another comment. Also imports
+ * tokens-shared.css when applicable.
  *
+ * @param {string} surface
+ *  Desktop surface, either "brand" or "platform". Determines
+ *  whether or not we need to import tokens-shared.css.
  * @return {String} Formatted comment header string
  */
-let customFileHeader = () => {
+let customFileHeader = surface => {
   let licenseString = [
     "/**",
     " * This Source Code Form is subject to the terms of the Mozilla Public",
@@ -29,7 +33,12 @@ let customFileHeader = () => {
     " * and run `npm run build` to see your changes.",
     " */",
   ].join("\n");
-  return [licenseString + "\n\n" + commentString + "\n\n"];
+
+  let cssImport = surface
+    ? `@import url("chrome://global/skin/design-system/tokens-shared.css");\n\n`
+    : "";
+
+  return [licenseString + "\n\n" + commentString + "\n\n" + cssImport];
 };
 
 const MEDIA_QUERY_PROPERTY_MAP = {
@@ -38,25 +47,37 @@ const MEDIA_QUERY_PROPERTY_MAP = {
 };
 
 /**
- * Formats built CSS to include "prefers-contrast" and "forced-colors" media
- * queries.
+ * Creates a surface-specific formatter. The formatter is used to build
+ * our different CSS files, including "prefers-contrast" and "forced-colors"
+ * media queries. See more at
+ * https://amzn.github.io/style-dictionary/#/formats?id=formatter
  *
- * @param {object} args
- *  Formatter arguments provided by style-dictionary. See more at
- *  https://amzn.github.io/style-dictionary/#/formats?id=formatter
- * @returns {string}
- *  Formatted CSS including media queries.
+ * @param {string} surface
+ *  Which desktop area we are generating CSS for.
+ *  Either "brand" (i.e. in-content) or "platform" (i.e. chrome).
+ * @returns {Function}
  */
-function hcmFormatter(args) {
+const createDesktopFormat = surface => args => {
   return (
-    customFileHeader() +
+    customFileHeader(surface) +
     ":root {\n" +
-    formatTokens({ args }) +
-    formatTokens({ mediaQuery: "prefers-contrast", args }) +
-    formatTokens({ mediaQuery: "forced-colors", args }) +
+    formatTokens({
+      surface,
+      args,
+    }) +
+    formatTokens({
+      mediaQuery: "prefers-contrast",
+      surface,
+      args,
+    }) +
+    formatTokens({
+      mediaQuery: "forced-colors",
+      surface,
+      args,
+    }) +
     "}\n"
   ).replaceAll(/(?<tokenName>\w+)-base(?=\b)/g, "$<tokenName>");
-}
+};
 
 /**
  * Formats a subset of tokens into CSS. Wraps token CSS in a media query when
@@ -66,23 +87,29 @@ function hcmFormatter(args) {
  * @param {string} [tokenArgs.mediaQuery]
  *  Media query formatted CSS should be wrapped in. This is used
  *  to determine what property we are parsing from the token values.
+ * @param {string} [tokenArgs.surface]
+ *  Specifies a desktop surface, either "brand" or "platform".
  * @param {object} tokenArgs.args
  *  Formatter arguments provided by style-dictionary. See more at
  *  https://amzn.github.io/style-dictionary/#/formats?id=formatter
  * @returns {string} Tokens formatted into a CSS string.
  */
-function formatTokens({ mediaQuery, args }) {
-  let prop = MEDIA_QUERY_PROPERTY_MAP[mediaQuery] ?? "value";
+function formatTokens({ mediaQuery, surface, args }) {
+  let prop = MEDIA_QUERY_PROPERTY_MAP[mediaQuery] ?? "default";
   let dictionary = Object.assign({}, args.dictionary);
   let tokens = [];
 
   dictionary.allTokens.forEach(token => {
-    let value = token[prop] || token.original.value[prop];
-    if (value && typeof value !== "object") {
-      let formattedToken = transformTokenValue(token, prop, dictionary);
+    let originalVal = getOriginalTokenValue(token, prop, surface);
+    if (originalVal) {
+      let formattedToken = transformTokenValue(token, originalVal, dictionary);
       tokens.push(formattedToken);
     }
   });
+
+  if (!tokens.length) {
+    return "";
+  }
 
   dictionary.allTokens = dictionary.allProperties = tokens;
 
@@ -95,7 +122,7 @@ function formatTokens({ mediaQuery, args }) {
     },
   });
 
-  // Weird spacing below is unfortunately necessary formatting the built CSS.
+  // Weird spacing below is unfortunately necessary for formatting the built CSS.
   if (mediaQuery) {
     return `
   @media (${mediaQuery}) {
@@ -104,71 +131,131 @@ ${formattedVars}
 `;
   }
   return formattedVars + "\n";
-  
 }
 
 /**
- * Takes a token object and changes "value" based on the supplied prop. Also
- * preserves variable references when necessary.
+ * Finds the original value of a token for a given media query and surface.
+ *
+ * @param {object} token - Token object parsed by style-dictionary.
+ * @param {string} prop - Name of the property we're querying for.
+ * @param {string} surface
+ *  The desktop surface we're generating CSS for, either "brand" or "platform".
+ * @returns {string} The original token value based on our parameters.
+ */
+function getOriginalTokenValue(token, prop, surface) {
+  if (surface) {
+    return token.original.value[surface]?.[prop];
+  } else if (prop == "default" && typeof token.original.value != "object") {
+    return token.original.value;
+  }
+  return token.original.value?.[prop];
+}
+
+/**
+ * Updates a token's value to the relevant original value after resolving
+ * variable references.
  *
  * @param {object} token - Token object parsed from JSON by style-dictionary.
- * @param {string} prop
- *  Name of the property used to get the token's new value.
+ * @param {string} originalVal
+ *  Original value of the token for the combination of surface and media query.
  * @param {object} dictionary
  *  Object of transformed tokens and helper fns provided by style-dictionary.
  * @returns {object} Token object with an updated value.
  */
-function transformTokenValue(token, prop, dictionary) {
-  let originalVal = token.original.value[prop];
-  if (dictionary.usesReference(originalVal)) {
-    let refs = dictionary.getReferences(originalVal);
-    return { ...token, value: `var(--${refs[0].name})` };
+function transformTokenValue(token, originalVal, dictionary) {
+  let value = originalVal;
+  if (dictionary.usesReference(value)) {
+    dictionary.getReferences(value).forEach(ref => {
+      value = value.replace(`{${ref.path.join(".")}}`, `var(--${ref.name})`);
+    });
   }
-  return { ...token, value: token[prop] || originalVal };
+  return { ...token, value };
 }
+
+/**
+ * Creates a light-dark transform that works for a given surface. Registers
+ * the transform with style-dictionary and returns the transform's name.
+ *
+ * @param {string} surface
+ *  The desktop surface we're generating CSS for, either "brand", "platform",
+ *  or "shared".
+ * @returns {string} Name of the transform that was registered.
+ */
+const createLightDarkTransform = surface => {
+  let name = `lightDarkTransform/${surface}`;
+
+  // Matcher function for determining if a token's value needs to undergo
+  // a light-dark transform.
+  let matcher = token => {
+    if (surface != "shared") {
+      return (
+        token.original.value[surface]?.light &&
+        token.original.value[surface]?.dark
+      );
+    }
+    return token.original.value.light && token.original.value.dark;
+  };
+
+  // Function that uses the token's original value to create a new "default"
+  // light-dark value and updates the original value object.
+  let transformer = token => {
+    if (surface != "shared") {
+      let lightDarkVal = `light-dark(${token.original.value[surface].light}, ${token.original.value[surface].dark})`;
+      token.original.value[surface].default = lightDarkVal;
+      return token.value;
+    }
+    let value = `light-dark(${token.original.value.light}, ${token.original.value.dark})`;
+    token.original.value.default = value;
+    return value;
+  };
+
+  StyleDictionary.registerTransform({
+    type: "value",
+    transitive: true,
+    name,
+    matcher,
+    transformer,
+  });
+
+  return name;
+};
 
 module.exports = {
   source: ["design-tokens.json"],
-  transform: {
-    defaultTransform: {
-      type: "value",
-      transitive: true,
-      name: "defaultTransform",
-      matcher: token => token.original.value.default,
-      transformer: token => token.original.value.default,
-    },
-    lightDarkTransform: {
-      type: "value",
-      transitive: true,
-      name: "lightDarkTransform",
-      matcher: token => token.original.value.light && token.original.value.dark,
-      transformer: token => {
-        return `light-dark(${token.original.value.light}, ${token.original.value.dark})`;
-      },
-    },
-  },
   format: {
-    "css/variables/hcm": hcmFormatter,
+    "css/variables/shared": createDesktopFormat(),
+    "css/variables/brand": createDesktopFormat("brand"),
+    "css/variables/platform": createDesktopFormat("platform"),
   },
   platforms: {
     css: {
-      // The ordering of transforms matter, so if we encountered
-      // "light", "dark", and "default" in the value object then
-      // this ordering would ensure that the "default" value is
-      // used to generate the token's value.
+      options: {
+        outputReferences: true,
+        showFileHeader: false,
+      },
       transforms: [
         ...StyleDictionary.transformGroup.css,
-        "lightDarkTransform",
-        "defaultTransform",
+        ...["shared", "platform", "brand"].map(createLightDarkTransform),
       ],
       buildPath: "build/css/",
       files: [
         {
           destination: "tokens-shared.css",
-          format: "css/variables/hcm",
-          options: {
-            outputReferences: true,
-          },
+          format: "css/variables/shared",
+        },
+        {
+          destination: "tokens-brand.css",
+          format: "css/variables/brand",
+          filter: token =>
+            typeof token.original.value == "object" &&
+            token.original.value.brand,
+        },
+        {
+          destination: "tokens-platform.css",
+          format: "css/variables/platform",
+          filter: token =>
+            typeof token.original.value == "object" &&
+            token.original.value.platform,
         },
       ],
     },
