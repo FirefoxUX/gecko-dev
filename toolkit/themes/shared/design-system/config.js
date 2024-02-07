@@ -57,7 +57,7 @@ const BASE_SELECTOR = ":root,\n" + ":host(.anonymous-content-host) {\n";
  * @param {string} surface
  *  Which desktop area we are generating CSS for.
  *  Either "brand" (i.e. in-content) or "platform" (i.e. chrome).
- * @returns {Function}
+ * @returns {Function} - Formatter function that returns a CSS string.
  */
 const createDesktopFormat = surface => args => {
   return (

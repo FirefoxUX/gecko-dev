@@ -74,8 +74,7 @@ const SHARED_FORCED_COLORS_CSS_RULES = {
 const BRAND_CSS_RULES = {
   "--border-interactive-color":
     "light-dark(var(--color-gray-60), var(--color-gray-50))",
-  "--text-color":
-    "light-dark(var(--color-gray-100), var(--color-gray-05))",
+  "--text-color": "light-dark(var(--color-gray-100), var(--color-gray-05))",
   "--text-color-deemphasized":
     "light-dark(color-mix(in srgb, currentColor 69%, transparent), color-mix(in srgb, currentColor 75%, transparent))",
 };
@@ -129,7 +128,7 @@ describe("CSS formats", () => {
       encoding: "UTF-8",
     });
 
-    let rulesByMediaQuery = output.split("@media");
+    let rulesByMediaQuery = output.split(/(?=\@media)/);
 
     it("should contain three blocks of CSS, including media queries", () => {
       expect(rulesByMediaQuery.length).toBe(3);
@@ -142,7 +141,8 @@ describe("CSS formats", () => {
     });
 
     rulesByMediaQuery.forEach(ruleSet => {
-      let queryName = ruleSet.trim().match(/(?<=\().+?(?=\) \{)/) || "base";
+      let queryName =
+        ruleSet.trim().match(/(?<=\@media\s*\().+?(?=\) \{)/) || "base";
       it(`should produce the expected ${queryName} CSS rules`, () => {
         let formattedCSS = formatCSS(ruleSet);
         expect(formattedCSS).toStrictEqual(SHARED_FIXTURE_BY_QUERY[queryName]);
