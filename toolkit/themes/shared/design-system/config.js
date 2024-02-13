@@ -5,7 +5,7 @@
 /* eslint-env node */
 
 const StyleDictionary = require("style-dictionary");
-const { formattedVariables } = StyleDictionary.formatHelpers;
+const { createPropertyFormatter } = StyleDictionary.formatHelpers;
 
 /**
  * Adds the Mozilla Public License header in one comment and
@@ -115,7 +115,7 @@ function formatTokens({ mediaQuery, surface, args }) {
 
   dictionary.allTokens = dictionary.allProperties = tokens;
 
-  let formattedVars = formattedVariables({
+  let formattedVars = formatVariables({
     format: "css",
     dictionary,
     outputReferences: args.options.outputReferences,
@@ -263,3 +263,108 @@ module.exports = {
     },
   },
 };
+
+const TOKEN_SECTIONS = {
+  "Base tokens/Color": [/^color-[^-]*$/, /^color-.*-a?\d+$/],
+  "Application tokens/Border": "border",
+  "Application tokens/Box": "box",
+  "Application tokens/Color": "color",
+  "Application tokens/Font weight": "font-weight",
+  "Application tokens/Focus outline": "focus-outline",
+  "Application tokens/Icon": "icon",
+  "Application tokens/Input/Button": "button",
+  "Application tokens/Input/Checkbox": "checkbox",
+  "Application tokens/Input/Text": "input-text",
+  "Application tokens/Link": "link",
+  "Application tokens/Text": "text",
+  "Application tokens/Size": "size",
+  "Application tokens/Spacing": ["space", "spacing"],
+  Unspecified: "",
+};
+
+function sortByName(a, b) {
+  let aParts = a.name.split("-");
+  let bParts = b.name.split("-");
+  if (aParts.length == bParts.length) {
+    // 05 > 10 when comparing strings, so handle numbers as ints.
+    for (let i = 0; i < aParts.length; i++) {
+      let aPart = aParts[i];
+      let bPart = bParts[i];
+      if (/^\d+$/.test(aPart) && /^\d+$/.test(bPart)) {
+        if (parseInt(bPart, 10) > parseInt(aPart, 10)) {
+          return -1;
+        }
+        if (parseInt(aPart, 10) > parseInt(bPart, 10)) {
+          return 1;
+        }
+      }
+      if (bPart > aPart) {
+        return -1;
+      }
+      if (aPart > bPart) {
+        return 1;
+      }
+    }
+    return 1;
+  }
+  return b.name > a.name ? -1 : 1;
+}
+
+function formatVariables({ format, dictionary, outputReferences, formatting }) {
+  let lastSection = [];
+  let propertyFormatter = createPropertyFormatter({
+    outputReferences,
+    dictionary,
+    format,
+    formatting,
+  });
+
+  let outputParts = [];
+  let remainingTokens = [...dictionary.allTokens];
+  let isFirst = true;
+
+  for (let [label, selector] of Object.entries(TOKEN_SECTIONS)) {
+    let sectionMatchers = Array.isArray(selector) ? selector : [selector];
+    let sectionParts = [];
+
+    remainingTokens = remainingTokens.filter(token => {
+      if (
+        sectionMatchers.some(m =>
+          m.test ? m.test(token.name) : token.name.startsWith(m)
+        )
+      ) {
+        sectionParts.push(token);
+        return false;
+      }
+      return true;
+    });
+
+    if (sectionParts.length) {
+      sectionParts.sort(sortByName);
+
+      let headingParts = [];
+      if (!isFirst) {
+        headingParts.push("");
+      }
+      isFirst = false;
+
+      let sectionLevel = "*";
+      let labelParts = label.split("/");
+      for (let i = 0; i < labelParts.length; i++) {
+        if (labelParts[i] != lastSection[i]) {
+          headingParts.push(
+            `${formatting.indentation}/${sectionLevel} ${labelParts[i]} ${sectionLevel}/`
+          );
+        }
+        sectionLevel += "*";
+      }
+      lastSection = labelParts;
+
+      outputParts = outputParts.concat(
+        headingParts.concat(sectionParts.map(propertyFormatter))
+      );
+    }
+  }
+
+  return outputParts.join("\n");
+}
