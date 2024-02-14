@@ -64,8 +64,8 @@
     /* Application tokens */
     /** Border **/
     --border-color: var(--text-color);
-    --border-interactive-color-active: AccentColor;
     --border-interactive-color: AccentColor;
+    --border-interactive-color-active: AccentColor;
     --border-interactive-color-disabled: GrayText;
     --border-interactive-color-hover: SelectedItem;
 
@@ -77,8 +77,8 @@
   @media (forced-colors) {
     /* Application tokens */
     /** Border **/
-    --border-interactive-color-active: ButtonText;
     --border-interactive-color: ButtonText;
+    --border-interactive-color-active: ButtonText;
     --border-interactive-color-disabled: GrayText;
     --border-interactive-color-hover: ButtonText;
   }

@@ -66,6 +66,10 @@ const MEDIA_QUERY_PROPERTY_MAP = {
 
 const BASE_SELECTOR = ":root,\n" + ":host(.anonymous-content-host) {\n";
 
+function formatBaseTokenNames(str) {
+  return str.replaceAll(/(?<tokenName>\w+)-base(?=\b)/g, "$<tokenName>");
+}
+
 /**
  * Creates a surface-specific formatter. The formatter is used to build
  * our different CSS files, including "prefers-contrast" and "forced-colors"
@@ -78,25 +82,25 @@ const BASE_SELECTOR = ":root,\n" + ":host(.anonymous-content-host) {\n";
  * @returns {Function} - Formatter function that returns a CSS string.
  */
 const createDesktopFormat = surface => args => {
-  return (
+  return formatBaseTokenNames(
     customFileHeader(surface) +
-    BASE_SELECTOR +
-    formatTokens({
-      surface,
-      args,
-    }) +
-    formatTokens({
-      mediaQuery: "prefers-contrast",
-      surface,
-      args,
-    }) +
-    formatTokens({
-      mediaQuery: "forced-colors",
-      surface,
-      args,
-    }) +
-    "}\n"
-  ).replaceAll(/(?<tokenName>\w+)-base(?=\b)/g, "$<tokenName>");
+      BASE_SELECTOR +
+      formatTokens({
+        surface,
+        args,
+      }) +
+      formatTokens({
+        mediaQuery: "prefers-contrast",
+        surface,
+        args,
+      }) +
+      formatTokens({
+        mediaQuery: "forced-colors",
+        surface,
+        args,
+      }) +
+      "}\n"
+  );
 };
 
 /**
@@ -271,7 +275,11 @@ function formatVariables({ format, dictionary, outputReferences, formatting }) {
 
     if (sectionParts.length) {
       sectionParts.sort((a, b) =>
-        a.name.localeCompare(b.name, undefined, { numeric: true })
+        formatBaseTokenNames(a.name).localeCompare(
+          formatBaseTokenNames(b.name),
+          undefined,
+          { numeric: true }
+        )
       );
 
       let headingParts = [];
