@@ -7,6 +7,24 @@
 const StyleDictionary = require("style-dictionary");
 const { createPropertyFormatter } = StyleDictionary.formatHelpers;
 
+const TOKEN_SECTIONS = {
+  "Base tokens/Color": [/^color-[^-]*$/, /^color-.*-a?\d+$/],
+  "Application tokens/Border": "border",
+  "Application tokens/Box": "box",
+  "Application tokens/Color": "color",
+  "Application tokens/Font weight": "font-weight",
+  "Application tokens/Focus outline": "focus-outline",
+  "Application tokens/Icon": "icon",
+  "Application tokens/Input/Button": "button",
+  "Application tokens/Input/Checkbox": "checkbox",
+  "Application tokens/Input/Text": "input-text",
+  "Application tokens/Link": "link",
+  "Application tokens/Text": "text",
+  "Application tokens/Size": "size",
+  "Application tokens/Spacing": ["space", "spacing"],
+  Unspecified: "",
+};
+
 /**
  * Adds the Mozilla Public License header in one comment and
  * how to make changes in the generated output files via the
@@ -222,66 +240,6 @@ const createLightDarkTransform = surface => {
   return name;
 };
 
-module.exports = {
-  source: ["design-tokens.json"],
-  format: {
-    "css/variables/shared": createDesktopFormat(),
-    "css/variables/brand": createDesktopFormat("brand"),
-    "css/variables/platform": createDesktopFormat("platform"),
-  },
-  platforms: {
-    css: {
-      options: {
-        outputReferences: true,
-        showFileHeader: false,
-      },
-      transforms: [
-        ...StyleDictionary.transformGroup.css,
-        ...["shared", "platform", "brand"].map(createLightDarkTransform),
-      ],
-      buildPath: "build/css/",
-      files: [
-        {
-          destination: "tokens-shared.css",
-          format: "css/variables/shared",
-        },
-        {
-          destination: "tokens-brand.css",
-          format: "css/variables/brand",
-          filter: token =>
-            typeof token.original.value == "object" &&
-            token.original.value.brand,
-        },
-        {
-          destination: "tokens-platform.css",
-          format: "css/variables/platform",
-          filter: token =>
-            typeof token.original.value == "object" &&
-            token.original.value.platform,
-        },
-      ],
-    },
-  },
-};
-
-const TOKEN_SECTIONS = {
-  "Base tokens/Color": [/^color-[^-]*$/, /^color-.*-a?\d+$/],
-  "Application tokens/Border": "border",
-  "Application tokens/Box": "box",
-  "Application tokens/Color": "color",
-  "Application tokens/Font weight": "font-weight",
-  "Application tokens/Focus outline": "focus-outline",
-  "Application tokens/Icon": "icon",
-  "Application tokens/Input/Button": "button",
-  "Application tokens/Input/Checkbox": "checkbox",
-  "Application tokens/Input/Text": "input-text",
-  "Application tokens/Link": "link",
-  "Application tokens/Text": "text",
-  "Application tokens/Size": "size",
-  "Application tokens/Spacing": ["space", "spacing"],
-  Unspecified: "",
-};
-
 function formatVariables({ format, dictionary, outputReferences, formatting }) {
   let lastSection = [];
   let propertyFormatter = createPropertyFormatter({
@@ -342,3 +300,45 @@ function formatVariables({ format, dictionary, outputReferences, formatting }) {
 
   return outputParts.join("\n");
 }
+
+module.exports = {
+  source: ["design-tokens.json"],
+  format: {
+    "css/variables/shared": createDesktopFormat(),
+    "css/variables/brand": createDesktopFormat("brand"),
+    "css/variables/platform": createDesktopFormat("platform"),
+  },
+  platforms: {
+    css: {
+      options: {
+        outputReferences: true,
+        showFileHeader: false,
+      },
+      transforms: [
+        ...StyleDictionary.transformGroup.css,
+        ...["shared", "platform", "brand"].map(createLightDarkTransform),
+      ],
+      buildPath: "build/css/",
+      files: [
+        {
+          destination: "tokens-shared.css",
+          format: "css/variables/shared",
+        },
+        {
+          destination: "tokens-brand.css",
+          format: "css/variables/brand",
+          filter: token =>
+            typeof token.original.value == "object" &&
+            token.original.value.brand,
+        },
+        {
+          destination: "tokens-platform.css",
+          format: "css/variables/platform",
+          filter: token =>
+            typeof token.original.value == "object" &&
+            token.original.value.platform,
+        },
+      ],
+    },
+  },
+};
