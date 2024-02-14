@@ -282,34 +282,6 @@ const TOKEN_SECTIONS = {
   Unspecified: "",
 };
 
-function sortByName(a, b) {
-  let aParts = a.name.split("-");
-  let bParts = b.name.split("-");
-  if (aParts.length == bParts.length) {
-    // 05 > 10 when comparing strings, so handle numbers as ints.
-    for (let i = 0; i < aParts.length; i++) {
-      let aPart = aParts[i];
-      let bPart = bParts[i];
-      if (/^\d+$/.test(aPart) && /^\d+$/.test(bPart)) {
-        if (parseInt(bPart, 10) > parseInt(aPart, 10)) {
-          return -1;
-        }
-        if (parseInt(aPart, 10) > parseInt(bPart, 10)) {
-          return 1;
-        }
-      }
-      if (bPart > aPart) {
-        return -1;
-      }
-      if (aPart > bPart) {
-        return 1;
-      }
-    }
-    return 1;
-  }
-  return b.name > a.name ? -1 : 1;
-}
-
 function formatVariables({ format, dictionary, outputReferences, formatting }) {
   let lastSection = [];
   let propertyFormatter = createPropertyFormatter({
@@ -340,7 +312,9 @@ function formatVariables({ format, dictionary, outputReferences, formatting }) {
     });
 
     if (sectionParts.length) {
-      sectionParts.sort(sortByName);
+      sectionParts.sort((a, b) =>
+        a.name.localeCompare(b.name, undefined, { numeric: true })
+      );
 
       let headingParts = [];
       if (!isFirst) {
