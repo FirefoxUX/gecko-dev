@@ -21,7 +21,7 @@ const TOKEN_SECTIONS = {
   "Application tokens/Link": "link",
   "Application tokens/Text": "text",
   "Application tokens/Size": "size",
-  "Application tokens/Spacing": ["space", "spacing"],
+  "Application tokens/Space": "space",
   Unspecified: "",
 };
 
@@ -244,6 +244,23 @@ const createLightDarkTransform = surface => {
   return name;
 };
 
+/**
+ * Format the tokens dictionary to a string. This mostly defers to
+ * StyleDictionary.createPropertyFormatter but first it sorts the tokens based
+ * on the groupings in TOKEN_SECTIONS and adds comment headers to CSS output.
+ *
+ * @param {object} options
+ *  Options for tokens to format.
+ * @param {string} options.format
+ *  The format to output. Supported: "css"
+ * @param {object} options.dictionary
+ *  The tokens dictionary.
+ * @param {string} options.outputReferences
+ *  Whether to output variable references.
+ * @param {object} options.formatting
+ *  The formatting settings to be passed to createPropertyFormatter.
+ * @returns {string} The formatted tokens.
+ */
 function formatVariables({ format, dictionary, outputReferences, formatting }) {
   let lastSection = [];
   let propertyFormatter = createPropertyFormatter({
