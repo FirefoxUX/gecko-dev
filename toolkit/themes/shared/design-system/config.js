@@ -5,7 +5,25 @@
 /* eslint-env node */
 
 const StyleDictionary = require("style-dictionary");
-const { formattedVariables } = StyleDictionary.formatHelpers;
+const { createPropertyFormatter } = StyleDictionary.formatHelpers;
+
+const TOKEN_SECTIONS = {
+  "Base tokens/Color": [/^color-[^-]*$/, /^color-.*-a?\d+$/],
+  "Application tokens/Border": "border",
+  "Application tokens/Box": "box",
+  "Application tokens/Color": "color",
+  "Application tokens/Font weight": "font-weight",
+  "Application tokens/Focus outline": "focus-outline",
+  "Application tokens/Icon": "icon",
+  "Application tokens/Input/Button": "button",
+  "Application tokens/Input/Checkbox": "checkbox",
+  "Application tokens/Input/Text": "input-text",
+  "Application tokens/Link": "link",
+  "Application tokens/Text": "text",
+  "Application tokens/Size": "size",
+  "Application tokens/Space": "space",
+  Unspecified: "",
+};
 
 /**
  * Adds the Mozilla Public License header in one comment and
@@ -48,6 +66,10 @@ const MEDIA_QUERY_PROPERTY_MAP = {
 
 const BASE_SELECTOR = ":root,\n" + ":host(.anonymous-content-host) {\n";
 
+function formatBaseTokenNames(str) {
+  return str.replaceAll(/(?<tokenName>\w+)-base(?=\b)/g, "$<tokenName>");
+}
+
 /**
  * Creates a surface-specific formatter. The formatter is used to build
  * our different CSS files, including "prefers-contrast" and "forced-colors"
@@ -60,25 +82,25 @@ const BASE_SELECTOR = ":root,\n" + ":host(.anonymous-content-host) {\n";
  * @returns {Function} - Formatter function that returns a CSS string.
  */
 const createDesktopFormat = surface => args => {
-  return (
+  return formatBaseTokenNames(
     customFileHeader(surface) +
-    BASE_SELECTOR +
-    formatTokens({
-      surface,
-      args,
-    }) +
-    formatTokens({
-      mediaQuery: "prefers-contrast",
-      surface,
-      args,
-    }) +
-    formatTokens({
-      mediaQuery: "forced-colors",
-      surface,
-      args,
-    }) +
-    "}\n"
-  ).replaceAll(/(?<tokenName>\w+)-base(?=\b)/g, "$<tokenName>");
+      BASE_SELECTOR +
+      formatTokens({
+        surface,
+        args,
+      }) +
+      formatTokens({
+        mediaQuery: "prefers-contrast",
+        surface,
+        args,
+      }) +
+      formatTokens({
+        mediaQuery: "forced-colors",
+        surface,
+        args,
+      }) +
+      "}\n"
+  );
 };
 
 /**
@@ -115,7 +137,7 @@ function formatTokens({ mediaQuery, surface, args }) {
 
   dictionary.allTokens = dictionary.allProperties = tokens;
 
-  let formattedVars = formattedVariables({
+  let formattedVars = formatVariables({
     format: "css",
     dictionary,
     outputReferences: args.options.outputReferences,
@@ -221,6 +243,88 @@ const createLightDarkTransform = surface => {
 
   return name;
 };
+
+/**
+ * Format the tokens dictionary to a string. This mostly defers to
+ * StyleDictionary.createPropertyFormatter but first it sorts the tokens based
+ * on the groupings in TOKEN_SECTIONS and adds comment headers to CSS output.
+ *
+ * @param {object} options
+ *  Options for tokens to format.
+ * @param {string} options.format
+ *  The format to output. Supported: "css"
+ * @param {object} options.dictionary
+ *  The tokens dictionary.
+ * @param {string} options.outputReferences
+ *  Whether to output variable references.
+ * @param {object} options.formatting
+ *  The formatting settings to be passed to createPropertyFormatter.
+ * @returns {string} The formatted tokens.
+ */
+function formatVariables({ format, dictionary, outputReferences, formatting }) {
+  let lastSection = [];
+  let propertyFormatter = createPropertyFormatter({
+    outputReferences,
+    dictionary,
+    format,
+    formatting,
+  });
+
+  let outputParts = [];
+  let remainingTokens = [...dictionary.allTokens];
+  let isFirst = true;
+
+  for (let [label, selector] of Object.entries(TOKEN_SECTIONS)) {
+    let sectionMatchers = Array.isArray(selector) ? selector : [selector];
+    let sectionParts = [];
+
+    remainingTokens = remainingTokens.filter(token => {
+      if (
+        sectionMatchers.some(m =>
+          m.test ? m.test(token.name) : token.name.startsWith(m)
+        )
+      ) {
+        sectionParts.push(token);
+        return false;
+      }
+      return true;
+    });
+
+    if (sectionParts.length) {
+      sectionParts.sort((a, b) =>
+        formatBaseTokenNames(a.name).localeCompare(
+          formatBaseTokenNames(b.name),
+          undefined,
+          { numeric: true }
+        )
+      );
+
+      let headingParts = [];
+      if (!isFirst) {
+        headingParts.push("");
+      }
+      isFirst = false;
+
+      let sectionLevel = "*";
+      let labelParts = label.split("/");
+      for (let i = 0; i < labelParts.length; i++) {
+        if (labelParts[i] != lastSection[i]) {
+          headingParts.push(
+            `${formatting.indentation}/${sectionLevel} ${labelParts[i]} ${sectionLevel}/`
+          );
+        }
+        sectionLevel += "*";
+      }
+      lastSection = labelParts;
+
+      outputParts = outputParts.concat(
+        headingParts.concat(sectionParts.map(propertyFormatter))
+      );
+    }
+  }
+
+  return outputParts.join("\n");
+}
 
 module.exports = {
   source: ["design-tokens.json"],

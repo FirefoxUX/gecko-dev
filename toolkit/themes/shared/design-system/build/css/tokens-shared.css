@@ -11,60 +11,75 @@
 
 :root,
 :host(.anonymous-content-host) {
-  --text-color-deemphasized: color-mix(in srgb, currentColor 60%, transparent);
+  /* Base tokens */
+  /** Color **/
+  --color-black-a10: rgba(0, 0, 0, 0.1);
+  --color-blue-05: #deeafc;
+  --color-blue-30: #73a7f3;
+  --color-blue-50: #0060df;
+  --color-blue-60: #0250bb;
+  --color-blue-70: #054096;
+  --color-blue-80: #003070;
+  --color-cyan-20: #aaf2ff;
+  --color-cyan-30: #aaf2ff;
+  --color-cyan-50: #00ddff;
+  --color-gray-05: #fbfbfe;
+  --color-gray-50: #bfbfc9;
+  --color-gray-60: #8f8f9d;
+  --color-gray-70: #5b5b66;
+  --color-gray-80: #23222b;
+  --color-gray-90: #1c1b22;
+  --color-gray-100: #15141a;
+  --color-green-05: #d8eedc;
+  --color-green-30: #4dbc87;
+  --color-green-50: #017a40;
+  --color-green-80: #004725;
+  --color-red-05: #ffe8e8;
+  --color-red-30: #f37f98;
+  --color-red-50: #d7264c;
+  --color-red-80: #690f22;
   --color-white: #ffffff;
   --color-yellow-05: #ffebcd;
-  --color-yellow-80: #5a3100;
-  --color-yellow-50: #cd411e;
   --color-yellow-30: #e49c49;
-  --color-red-05: #ffe8e8;
-  --color-red-80: #690f22;
-  --color-red-50: #d7264c;
-  --color-red-30: #f37f98;
-  --color-green-05: #d8eedc;
-  --color-green-80: #004725;
-  --color-green-50: #017a40;
-  --color-green-30: #4dbc87;
-  --color-gray-05: #fbfbfe;
-  --color-gray-100: #15141a;
-  --color-gray-90: #1c1b22;
-  --color-gray-80: #23222b;
-  --color-gray-70: #5b5b66;
-  --color-gray-60: #8f8f9d;
-  --color-gray-50: #bfbfc9;
-  --color-cyan-50: #00ddff;
-  --color-cyan-30: #aaf2ff;
-  --color-cyan-20: #aaf2ff;
-  --color-blue-05: #deeafc;
-  --color-blue-80: #003070;
-  --color-blue-70: #054096;
-  --color-blue-60: #0250bb;
-  --color-blue-50: #0060df;
-  --color-blue-30: #73a7f3;
-  --color-black-a10: rgba(0, 0, 0, 0.1);
-  --border-width: 1px;
+  --color-yellow-50: #cd411e;
+  --color-yellow-80: #5a3100;
+
+  /* Application tokens */
+  /** Border **/
+  --border-radius-circle: 9999px;
   --border-radius-medium: 8px;
   --border-radius-small: 4px;
-  --border-radius-circle: 9999px;
-  --color-background-warning: light-dark(var(--color-yellow-05), var(--color-blue-80));
-  --color-background-success: light-dark(var(--color-green-05), var(--color-yellow-80));
-  --color-background-information: light-dark(var(--color-blue-05), var(--color-blue-80));
+  --border-width: 1px;
+
+  /** Color **/
   --color-background-critical: light-dark(var(--color-red-05), var(--color-red-80));
+  --color-background-information: light-dark(var(--color-blue-05), var(--color-blue-80));
+  --color-background-success: light-dark(var(--color-green-05), var(--color-yellow-80));
+  --color-background-warning: light-dark(var(--color-yellow-05), var(--color-blue-80));
+
+  /** Text **/
+  --text-color-deemphasized: color-mix(in srgb, currentColor 60%, transparent);
 
   @media (prefers-contrast) {
-    --text-color-deemphasized: inherit;
-    --border-interactive-color-disabled: GrayText;
-    --border-interactive-color-active: AccentColor;
-    --border-interactive-color-hover: SelectedItem;
-    --text-color: CanvasText;
-    --border-interactive-color: AccentColor;
+    /* Application tokens */
+    /** Border **/
     --border-color: var(--text-color);
+    --border-interactive-color: AccentColor;
+    --border-interactive-color-active: AccentColor;
+    --border-interactive-color-disabled: GrayText;
+    --border-interactive-color-hover: SelectedItem;
+
+    /** Text **/
+    --text-color: CanvasText;
+    --text-color-deemphasized: inherit;
   }
 
   @media (forced-colors) {
-    --border-interactive-color-disabled: GrayText;
-    --border-interactive-color-active: ButtonText;
-    --border-interactive-color-hover: ButtonText;
+    /* Application tokens */
+    /** Border **/
     --border-interactive-color: ButtonText;
+    --border-interactive-color-active: ButtonText;
+    --border-interactive-color-disabled: GrayText;
+    --border-interactive-color-hover: ButtonText;
   }
 }
