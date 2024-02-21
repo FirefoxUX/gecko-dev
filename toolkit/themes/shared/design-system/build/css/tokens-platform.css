@@ -13,6 +13,10 @@
 
 :root,
 :host(.anonymous-content-host) {
-  --text-color: currentColor;
+  /* Application tokens */
+  /** Border **/
   --border-interactive-color: color-mix(in srgb, currentColor 15%, var(--color-gray-60));
+
+  /** Text **/
+  --text-color: currentColor;
 }
