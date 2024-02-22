@@ -60,6 +60,39 @@
     --color-background-success: light-dark(var(--color-green-05), var(--color-yellow-80));
     --color-background-warning: light-dark(var(--color-yellow-05), var(--color-blue-80));
 
+    /** Box **/
+    --box-background-color: var(--color-canvas);
+
+    /** Color **/
+    --color-accent-primary: AccentColor;
+    --color-accent-primary-active: ButtonText;
+    --color-accent-primary-hover: ButtonText;
+    --color-background-critical: var(--color-canvas);
+    --color-background-information: var(--color-canvas);
+    --color-background-success: var(--color-canvas);
+    --color-background-warning: var(--color-canvas);
+    --color-error-outline: var(--border-color);
+
+    /** Icon **/
+    --icon-color: var(--text-color);
+    --icon-color-critical: var(--icon-color);
+    --icon-color-information: var(--icon-color);
+    --icon-color-success: var(--icon-color);
+    --icon-color-warning: var(--icon-color);
+
+    /** Input **/
+    /*** Button ***/
+    --button-background-color: ButtonFace;
+    --button-background-color-active: ButtonFace;
+    --button-background-color-disabled: GrayText;
+    --button-background-color-hover: ButtonFace;
+
+    /** Link **/
+    --link-color: LinkText;
+    --link-color-active: ActiveText;
+    --link-color-hover: LinkText;
+    --link-color-visited: var(--link-color);
+
     /** Text **/
     --text-color-deemphasized: color-mix(in srgb, currentColor 60%, transparent);
   }

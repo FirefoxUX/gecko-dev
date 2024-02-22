@@ -92,21 +92,11 @@ const SHARED_CSS_RULES = {
 };
 
 const SHARED_PREFERS_CONTRAST_CSS_RULES = {
-<<<<<<< HEAD
-  "--text-color-deemphasized": "inherit",
-  "--text-color": "CanvasText",
-  "--border-interactive-color-disabled": "GrayText",
-=======
   "--border-color": "var(--text-color)",
->>>>>>> 0fd8b1636305 (add remaining tokens to design-tokens.json)
   "--border-interactive-color-active": "AccentColor",
   "--border-interactive-color": "AccentColor",
   "--border-interactive-color-disabled": "GrayText",
   "--border-interactive-color-hover": "SelectedItem",
-<<<<<<< HEAD
-  "--border-interactive-color": "AccentColor",
-  "--border-color": "var(--text-color)",
-=======
   "--box-background-color": "var(--color-canvas)",
   "--button-background-color-active": "ButtonFace",
   "--button-background-color-disabled": "GrayText",
@@ -133,7 +123,6 @@ const SHARED_PREFERS_CONTRAST_CSS_RULES = {
   "--text-color-deemphasized": "inherit",
   "--text-color": "CanvasText",
   "--text-color-error": "inherit",
->>>>>>> 0fd8b1636305 (add remaining tokens to design-tokens.json)
 };
 
 const SHARED_FORCED_COLORS_CSS_RULES = {
@@ -141,21 +130,14 @@ const SHARED_FORCED_COLORS_CSS_RULES = {
   "--border-interactive-color": "ButtonText",
   "--border-interactive-color-disabled": "GrayText",
   "--border-interactive-color-hover": "ButtonText",
-<<<<<<< HEAD
-  "--border-interactive-color": "ButtonText",
-=======
   "--color-accent-primary-active": "SelectedItem",
   "--color-accent-primary-hover": "SelectedItem",
   "--color-accent-primary": "ButtonText",
->>>>>>> 0fd8b1636305 (add remaining tokens to design-tokens.json)
 };
 
 const BRAND_CSS_RULES = {
   "--border-interactive-color":
     "light-dark(var(--color-gray-60), var(--color-gray-50))",
-<<<<<<< HEAD
-  "--text-color": "light-dark(var(--color-gray-100), var(--color-gray-05))",
-=======
   "--brand-color-accent-active":
     "light-dark(var(--color-blue-70), var(--color-cyan-20))",
   "--brand-color-accent-hover":
@@ -184,7 +166,6 @@ const BRAND_CSS_RULES = {
   "--link-color-hover": "var(--brand-color-accent-hover)",
   "--link-color-visited": "var(--link-color)",
   "--link-color": "var(--brand-color-accent)",
->>>>>>> 0fd8b1636305 (add remaining tokens to design-tokens.json)
   "--text-color-deemphasized":
     "light-dark(color-mix(in srgb, currentColor 69%, transparent), color-mix(in srgb, currentColor 75%, transparent))",
   "--text-color": "light-dark(var(--color-gray-100), var(--color-gray-05))",
@@ -193,8 +174,6 @@ const BRAND_CSS_RULES = {
 const PLATFORM_CSS_RULES = {
   "--border-interactive-color":
     "color-mix(in srgb, currentColor 15%, var(--color-gray-60))",
-<<<<<<< HEAD
-=======
   "--button-background-color-active": "var(--button-active-bgcolor)",
   "--button-background-color-hover": "var(--button-hover-bgcolor)",
   "--button-background-color": "var(--button-bgcolor)",
@@ -218,7 +197,6 @@ const PLATFORM_CSS_RULES = {
   "--platform-color-accent-hover": "var(--button-primary-hover-bgcolor)",
   "--platform-color-accent": "var(--button-primary-bgcolor, AccentColor)",
   "--text-color": "currentColor",
->>>>>>> 0fd8b1636305 (add remaining tokens to design-tokens.json)
   "--text-color": "currentColor",
 };
 
@@ -236,7 +214,7 @@ const FIXTURE_BY_SURFACE = {
 // Use our real config, just modify some values for the test.
 let testConfig = Object.assign({}, config);
 testConfig.source = [path.join(__dirname, "../design-tokens.json")];
-testConfig.platforms.css.buildPath = TEST_BUILD_PATH;q
+testConfig.platforms.css.buildPath = TEST_BUILD_PATH;
 
 function formatCSS(src) {
   return src
