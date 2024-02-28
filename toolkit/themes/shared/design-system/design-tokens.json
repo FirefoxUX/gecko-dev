@@ -154,11 +154,6 @@
         "value": "{font.weight.bold}"
       }
     },
-    "line": {
-      "height": {
-        "value": "{line.height.small}"
-      }
-    },
     "min": {
       "height": {
         "value": "{size.item.large}"
@@ -443,16 +438,6 @@
       },
       "bold": {
         "value": 600
-      },
-      "light": {
-        "value": {
-          "brand": {
-            "default": 300
-          },
-          "platform": {
-            "default": "unset"
-          }
-        }
       }
     }
   },
@@ -497,38 +482,9 @@
   },
   "input": {
     "text": {
-      "line": {
-        "height": {
-          "value": "{button.line.height}"
-        }
-      },
       "min": {
         "height": {
           "value": "{button.min.height}"
-        }
-      }
-    }
-  },
-  "line": {
-    "height": {
-      "small": {
-        "value": {
-          "brand": {
-            "default": 1.3
-          },
-          "platform": {
-            "default": "unset"
-          }
-        }
-      },
-      "@base": {
-        "value": {
-          "brand": {
-            "default": 1.5
-          },
-          "platform": {
-            "default": "normal"
-          }
         }
       }
     }
@@ -628,7 +584,7 @@
       }
     }
   },
-  "spacing": {
+  "space": {
     "small": {
       "value": "0.5rem"
     }

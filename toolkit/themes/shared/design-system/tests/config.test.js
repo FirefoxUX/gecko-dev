@@ -17,7 +17,6 @@ const SHARED_CSS_RULES = {
   "--box-shadow-10": "0 1px 4px var(--color-black-a10)",
   "--button-border-radius": "var(--border-radius-small)",
   "--button-font-weight": "var(--font-weight-bold)",
-  "--button-line-height": "var(--line-height-small)",
   "--button-min-height": "var(--size-item-large)",
   "--color-background-critical":
     "light-dark(var(--color-red-05), var(--color-red-80))",
@@ -77,13 +76,12 @@ const SHARED_CSS_RULES = {
   "--icon-color-warning":
     "light-dark(var(--color-yellow-50), var(--color-yellow-30))",
   "--icon-color": "light-dark(var(--color-gray-70), var(--color-gray-05))",
-  "--input-text-line-height": "var(--button-line-height)",
   "--input-text-min-height": "var(--button-min-height)",
   "--link-focus-outline-offset": "1px",
   "--size-item-large": "32px",
   "--size-item-medium": "28px",
   "--size-item-small": "16px",
-  "--spacing-small": "0.5rem",
+  "--space-small": "0.5rem",
   "--text-color-deemphasized":
     "color-mix(in srgb, currentColor 60%, transparent)",
   "--text-color-deemphasized":
@@ -159,9 +157,6 @@ const BRAND_CSS_RULES = {
   "--font-size-small": "0.867rem",
   "--font-size-xlarge": "1.467rem",
   "--font-size-xxlarge": "2.2rem",
-  "--font-weight-light": "300",
-  "--line-height": "1.5",
-  "--line-height-small": "1.3",
   "--link-color-active": "var(--brand-color-accent-active)",
   "--link-color-hover": "var(--brand-color-accent-hover)",
   "--link-color-visited": "var(--link-color)",
@@ -186,9 +181,6 @@ const PLATFORM_CSS_RULES = {
   "--font-size-small": "unset",
   "--font-size-xlarge": "unset",
   "--font-size-xxlarge": "unset",
-  "--font-weight-light": "unset",
-  "--line-height": "normal",
-  "--line-height-small": "unset",
   "--link-color-active": "ActiveText",
   "--link-color-hover": "LinkText",
   "--link-color-visited": "var(--link-color)",
