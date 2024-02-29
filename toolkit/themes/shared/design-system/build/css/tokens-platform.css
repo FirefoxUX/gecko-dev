@@ -11,12 +11,14 @@
 
 @import url("chrome://global/skin/design-system/tokens-shared.css");
 
-:root,
-:host(.anonymous-content-host) {
-  /* Application tokens */
-  /** Border **/
-  --border-interactive-color: color-mix(in srgb, currentColor 15%, var(--color-gray-60));
+@layer tokens-foundation {
+  :root,
+  :host(.anonymous-content-host) {
+    /* Application tokens */
+    /** Border **/
+    --border-interactive-color: color-mix(in srgb, currentColor 15%, var(--color-gray-60));
 
-  /** Text **/
-  --text-color: currentColor;
+    /** Text **/
+    --text-color: currentColor;
+  }
 }
