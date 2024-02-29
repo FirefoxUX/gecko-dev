@@ -55,16 +55,24 @@ let customFileHeader = surface => {
   let cssImport = surface
     ? `@import url("chrome://global/skin/design-system/tokens-shared.css");\n\n`
     : "";
+  let layerString = !surface ? `@layer tokens-foundation, tokens-prefers-contrast, tokens-forced-colors;\n\n` : "";
 
-  return [licenseString + "\n\n" + commentString + "\n\n" + cssImport];
+  return [
+    licenseString + "\n\n" + 
+    commentString + "\n\n"  +
+    cssImport +
+    layerString
+  ];
 };
+
+const NEST_MEDIA_QUERIES_COMMENT = `/* Bug 1879900: Can't nest media queries inside of :host, :root selector
+   until Bug 1879349 lands */`;
 
 const MEDIA_QUERY_PROPERTY_MAP = {
   "forced-colors": "forcedColors",
   "prefers-contrast": "prefersContrast",
 };
 
-const BASE_SELECTOR = ":root,\n" + ":host(.anonymous-content-host) {\n";
 
 function formatBaseTokenNames(str) {
   return str.replaceAll(/(?<tokenName>\w+)-base(?=\b)/g, "$<tokenName>");
@@ -84,7 +92,6 @@ function formatBaseTokenNames(str) {
 const createDesktopFormat = surface => args => {
   return formatBaseTokenNames(
     customFileHeader(surface) +
-      BASE_SELECTOR +
       formatTokens({
         surface,
         args,
@@ -98,10 +105,10 @@ const createDesktopFormat = surface => args => {
         mediaQuery: "forced-colors",
         surface,
         args,
-      }) +
-      "}\n"
+      }) 
   );
 };
+
 
 /**
  * Formats a subset of tokens into CSS. Wraps token CSS in a media query when
@@ -142,19 +149,33 @@ function formatTokens({ mediaQuery, surface, args }) {
     dictionary,
     outputReferences: args.options.outputReferences,
     formatting: {
-      indentation: mediaQuery ? "    " : "  ",
+      indentation: mediaQuery ? "      " : "    ",
     },
   });
 
+  let layer = `tokens-${mediaQuery ?? "foundation"}`;
   // Weird spacing below is unfortunately necessary for formatting the built CSS.
   if (mediaQuery) {
     return `
+${NEST_MEDIA_QUERIES_COMMENT}
+@layer ${layer} {
   @media (${mediaQuery}) {
+    :root,
+    :host(.anonymous-content-host) {
 ${formattedVars}
+    }
   }
+}
 `;
   }
-  return formattedVars + "\n";
+
+  return `@layer ${layer} {
+  :root,
+  :host(.anonymous-content-host) {
+${formattedVars}
+  }
+}
+`;
 }
 
 /**
