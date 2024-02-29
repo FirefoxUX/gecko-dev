@@ -24,6 +24,26 @@ const TOKEN_SECTIONS = {
   "Application tokens/Space": "space",
   Unspecified: "",
 };
+const TSHIRT_ORDER = [
+  "xxxsmall",
+  "xxsmall",
+  "xsmall",
+  "small",
+  "medium",
+  "large",
+  "xlarge",
+  "xxlarge",
+  "xxxlarge",
+];
+const STATE_ORDER = [
+  "base",
+  "default",
+  "root",
+  "hover",
+  "active",
+  "focus",
+  "disabled",
+];
 
 /**
  * Adds the Mozilla Public License header in one comment and
@@ -312,13 +332,30 @@ function formatVariables({ format, dictionary, outputReferences, formatting }) {
     });
 
     if (sectionParts.length) {
-      sectionParts.sort((a, b) =>
-        formatBaseTokenNames(a.name).localeCompare(
+      sectionParts.sort((a, b) => {
+        let aLastDash = a.name.lastIndexOf("-");
+        let bLastDash = b.name.lastIndexOf("-");
+        if (
+          aLastDash == bLastDash &&
+          a.name.substring(0, aLastDash) == b.name.substring(0, bLastDash)
+        ) {
+          let aSize = TSHIRT_ORDER.indexOf(a.name.substring(aLastDash + 1));
+          let bSize = TSHIRT_ORDER.indexOf(b.name.substring(bLastDash + 1));
+          if (aSize != -1 && bSize != -1) {
+            return aSize - bSize;
+          }
+          let aState = STATE_ORDER.indexOf(a.name.substring(aLastDash + 1));
+          let bState = STATE_ORDER.indexOf(b.name.substring(bLastDash + 1));
+          if (aState != -1 && bState != -1) {
+            return aState - bState;
+          }
+        }
+        return formatBaseTokenNames(a.name).localeCompare(
           formatBaseTokenNames(b.name),
           undefined,
           { numeric: true }
-        )
-      );
+        );
+      });
 
       let headingParts = [];
       if (!isFirst) {
