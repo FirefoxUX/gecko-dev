@@ -50,8 +50,8 @@
     /* Application tokens */
     /** Border **/
     --border-radius-circle: 9999px;
-    --border-radius-medium: 8px;
     --border-radius-small: 4px;
+    --border-radius-medium: 8px;
     --border-width: 1px;
 
     /** Color **/
@@ -75,9 +75,9 @@
       /** Border **/
       --border-color: var(--text-color);
       --border-interactive-color: AccentColor;
+      --border-interactive-color-hover: SelectedItem;
       --border-interactive-color-active: AccentColor;
       --border-interactive-color-disabled: GrayText;
-      --border-interactive-color-hover: SelectedItem;
 
       /** Text **/
       --text-color: CanvasText;
@@ -95,9 +95,9 @@
       /* Application tokens */
       /** Border **/
       --border-interactive-color: ButtonText;
+      --border-interactive-color-hover: ButtonText;
       --border-interactive-color-active: ButtonText;
       --border-interactive-color-disabled: GrayText;
-      --border-interactive-color-hover: ButtonText;
     }
   }
 }
