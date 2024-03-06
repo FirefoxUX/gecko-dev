@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const StyleDictionary = require("style-dictionary");
-const config = require("../config");
+const config = require("../tokens-config");
 
 const TEST_BUILD_PATH = "tests/build/css/";
 

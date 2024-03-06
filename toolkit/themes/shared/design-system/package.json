@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "jest --testPathPattern=tests --silent",
-    "build": "style-dictionary build"
+    "build": "style-dictionary build --config ./tokens-config.js"
   },
   "author": "",
   "license": "ISC",

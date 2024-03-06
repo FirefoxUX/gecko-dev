@@ -402,7 +402,6 @@ module.exports = {
         ...StyleDictionary.transformGroup.css,
         ...["shared", "platform", "brand"].map(createLightDarkTransform),
       ],
-      buildPath: "build/css/",
       files: [
         {
           destination: "tokens-shared.css",
