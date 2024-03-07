@@ -153,7 +153,7 @@ function formatTokens({ mediaQuery, surface, args }) {
 
   dictionary.allTokens.forEach(token => {
     let originalVal = getOriginalTokenValue(token, prop, surface);
-    if (originalVal) {
+    if (originalVal != undefined) {
       let formattedToken = transformTokenValue(token, originalVal, dictionary);
       tokens.push(formattedToken);
     }

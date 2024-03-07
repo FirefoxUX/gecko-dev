@@ -23,34 +23,33 @@
     --border-interactive-color: light-dark(var(--color-gray-60), var(--color-gray-50));
 
     /** Color **/
-    --brand-color-accent: light-dark(var(--color-blue-50), var(--color-cyan-50));
-    --brand-color-accent-hover: light-dark(var(--color-blue-60), var(--color-cyan-30));
-    --brand-color-accent-active: light-dark(var(--color-blue-70), var(--color-cyan-20));
-    --color-accent-primary: var(--brand-color-accent);
-    --color-accent-primary-hover: var(--brand-color-accent-hover);
-    --color-accent-primary-active: var(--brand-color-accent-active);
+    --color-accent-primary: light-dark(var(--color-blue-50), var(--color-cyan-50));
+    --color-accent-primary-hover: light-dark(var(--color-blue-60), var(--color-cyan-30));
+    --color-accent-primary-active: light-dark(var(--color-blue-70), var(--color-cyan-20));
 
     /** Font size **/
     --font-size-root: 15px;
     --font-size-small: 0.867rem;
     --font-size-large: 1.133rem;
     --font-size-xlarge: 1.467rem;
-    --font-size-xxlarge: 2.2rem;
+    --font-size-xxlarge: 1.6rem;
 
     /** Input **/
     /*** Button ***/
     --button-background-color: color-mix(in srgb, currentColor 7%, transparent);
     --button-background-color-hover: color-mix(in srgb, currentColor 14%, transparent);
     --button-background-color-active: color-mix(in srgb, currentColor 21%, transparent);
+    --button-border-color-primary: transparent;
+    --button-text-color: light-dark(var(--color-gray-100), var(--color-gray-05));
+    --button-text-color-primary: light-dark(var(--color-gray-05), var(--color-gray-100));
 
     /** Link **/
-    --link-color: var(--brand-color-accent);
-    --link-color-hover: var(--brand-color-accent-hover);
-    --link-color-active: var(--brand-color-accent-active);
+    --link-color: var(--color-accent-primary);
+    --link-color-hover: var(--color-accent-primary-hover);
+    --link-color-active: var(--color-accent-primary-active);
     --link-color-visited: var(--link-color);
 
     /** Text **/
     --text-color: light-dark(var(--color-gray-100), var(--color-gray-05));
-    --text-color-deemphasized: light-dark(color-mix(in srgb, currentColor 69%, transparent), color-mix(in srgb, currentColor 75%, transparent));
   }
 }
