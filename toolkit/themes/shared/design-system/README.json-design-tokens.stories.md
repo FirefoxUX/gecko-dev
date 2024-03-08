@@ -3,7 +3,7 @@
 The benefit of storing design tokens with a platform-agnostic format such as JSON is that it can be converted or translated into other languages or tools (e.g CSS, Swift, Kotlin, Figma).
 
 ## Quick start
-We host a JSON file that holds our source of truth for design tokens in `mozilla-central` under the [design-system](https://searchfox.org/mozilla-central/source/toolkit/themes/shared/design-system) folder in `toolkit/themes/shared`. The CSS design token files in that folder come from the JSON file. If you need to modify a design token file, you should be editing the JSON.
+`design-tokens.json` holds our source of truth for design tokens in `mozilla-central` under the [design-system](https://searchfox.org/mozilla-central/source/toolkit/themes/shared/design-system) folder in `toolkit/themes/shared`. The CSS design token files in that folder come from the JSON file. If you need to modify a design token file, you should be editing the JSON.
 
 In order for us to be able to define design tokens in one place (the JSON file) and allow all platforms to consume design tokens in their specific format, we use a build system called [Style Dictionary](https://amzn.github.io/style-dictionary/#/).
 
