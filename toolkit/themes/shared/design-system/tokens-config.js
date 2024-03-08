@@ -11,7 +11,8 @@ const TOKEN_SECTIONS = {
   "Base tokens/Color": [/^color-[^-]*$/, /^color-.*-a?\d+$/],
   "Application tokens/Border": "border",
   "Application tokens/Box": "box",
-  "Application tokens/Color": "color",
+  "Application tokens/Color": ["brand-color", "color", "platform-color"],
+  "Application tokens/Font size": "font-size",
   "Application tokens/Font weight": "font-weight",
   "Application tokens/Focus outline": "focus-outline",
   "Application tokens/Icon": "icon",
@@ -129,7 +130,6 @@ const createDesktopFormat = surface => args => {
   );
 };
 
-
 /**
  * Formats a subset of tokens into CSS. Wraps token CSS in a media query when
  * applicable.
@@ -152,7 +152,7 @@ function formatTokens({ mediaQuery, surface, args }) {
 
   dictionary.allTokens.forEach(token => {
     let originalVal = getOriginalTokenValue(token, prop, surface);
-    if (originalVal) {
+    if (originalVal != undefined) {
       let formattedToken = transformTokenValue(token, originalVal, dictionary);
       tokens.push(formattedToken);
     }
@@ -401,7 +401,6 @@ module.exports = {
         ...StyleDictionary.transformGroup.css,
         ...["shared", "platform", "brand"].map(createLightDarkTransform),
       ],
-      buildPath: "build/css/",
       files: [
         {
           destination: "tokens-shared.css",
