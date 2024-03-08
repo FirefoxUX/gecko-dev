@@ -11,7 +11,6 @@ In order for us to be able to define design tokens in one place (the JSON file) 
 Here's how to build design tokens for desktop:
 
 ```sh
-$ cd toolkit/…/design-system
 $ ./mach npm run build --prefix=toolkit/themes/shared/design-system
 ```
 
