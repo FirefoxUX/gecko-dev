@@ -248,14 +248,12 @@
         "ghost": {
           "@base": {
             "value": {
-              "default": "{button.border.color.@base}",
-              "forcedColors": "{button.border.color.@base}"
+              "default": "{button.border.color.@base}"
             }
           },
           "active": {
             "value": {
-              "default": "{button.border.color.active}",
-              "forcedColors": "{button.border.color.active}"
+              "default": "{button.border.color.active}"
             }
           },
           "disabled": {
@@ -266,8 +264,7 @@
           },
           "hover": {
             "value": {
-              "default": "{button.border.color.hover}",
-              "forcedColors": "{button.border.color.hover}"
+              "default": "{button.border.color.hover}"
             }
           }
         },
@@ -414,14 +411,12 @@
         "ghost": {
           "@base": {
             "value": {
-              "default": "{button.text.color.@base}",
-              "forcedColors": "{button.text.color.@base}"
+              "default": "{button.text.color.@base}"
             }
           },
           "active": {
             "value": {
-              "default": "{button.text.color.active}",
-              "forcedColors": "{button.text.color.active}"
+              "default": "{button.text.color.active}"
             }
           },
           "disabled": {
@@ -432,8 +427,7 @@
           },
           "hover": {
             "value": {
-              "default": "{button.text.color.hover}",
-              "forcedColors": "{button.text.color.hover}"
+              "default": "{button.text.color.hover}"
             }
           }
         },

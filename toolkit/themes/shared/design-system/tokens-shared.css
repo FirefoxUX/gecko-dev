@@ -274,9 +274,6 @@
       --button-border-color-destructive-disabled: var(--button-border-color-primary-disabled);
       --button-border-color-hover: var(--border-interactive-color-hover);
       --button-border-color-disabled: var(--border-interactive-color-disabled);
-      --button-border-color-ghost: var(--button-border-color);
-      --button-border-color-ghost-hover: var(--button-border-color-hover);
-      --button-border-color-ghost-active: var(--button-border-color-active);
       --button-border-color-ghost-disabled: var(--button-border-color-disabled);
       --button-border-color-primary: ButtonFace;
       --button-border-color-primary-hover: SelectedItemText;
@@ -288,12 +285,9 @@
       --button-text-color-destructive-hover: var(--button-text-color-primary-hover);
       --button-text-color-destructive-active: var(--button-text-color-primary-active);
       --button-text-color-destructive-disabled: var(--button-text-color-primary-disabled);
-      --button-text-color-disabled: GrayText;
-      --button-text-color-ghost: var(--button-text-color);
-      --button-text-color-ghost-hover: var(--button-text-color-hover);
-      --button-text-color-ghost-active: var(--button-text-color-active);
-      --button-text-color-ghost-disabled: var(--button-text-color-disabled);
       --button-text-color-hover: SelectedItem;
+      --button-text-color-disabled: GrayText;
+      --button-text-color-ghost-disabled: var(--button-text-color-disabled);
       --button-text-color-primary: ButtonFace;
       --button-text-color-primary-hover: SelectedItemText;
     }
