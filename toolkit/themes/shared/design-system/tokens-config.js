@@ -130,7 +130,6 @@ const createDesktopFormat = surface => args => {
   );
 };
 
-
 /**
  * Formats a subset of tokens into CSS. Wraps token CSS in a media query when
  * applicable.

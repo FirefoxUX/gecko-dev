@@ -1,19 +1,12 @@
 {
   "name": "design-system",
   "version": "1.0.0",
-  "description": "## What are design tokens?",
-  "main": "index.js",
-  "eslintConfig": {
-    "jest/globals": true
-  },
+  "description": "Package file for node modules used to create our CSS tokens from a JSON source of truth.",
+  "license": "MPL-2.0",
   "scripts": {
-    "test": "jest --testPathPattern=tests --silent",
     "build": "style-dictionary build --config ./tokens-config.js"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "jest": "^29.7.0",
-    "style-dictionary": "^3.9.1"
+    "style-dictionary": "^3.9.2"
   }
 }
