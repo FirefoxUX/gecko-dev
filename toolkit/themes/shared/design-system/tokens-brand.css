@@ -53,3 +53,19 @@
     --text-color: light-dark(var(--color-gray-100), var(--color-gray-05));
   }
 }
+
+/* Bug 1879900: Can't nest media queries inside of :host, :root selector
+   until Bug 1879349 lands */
+@layer tokens-prefers-contrast {
+  @media (prefers-contrast) {
+    :root,
+    :host(.anonymous-content-host) {
+      /* Application tokens */
+      /** Border **/
+      --border-interactive-color: var(--text-color);
+      --border-interactive-color-hover: var(--border-interactive-color);
+      --border-interactive-color-active: var(--border-interactive-color);
+      --border-interactive-color-disabled: var(--border-interactive-color);
+    }
+  }
+}

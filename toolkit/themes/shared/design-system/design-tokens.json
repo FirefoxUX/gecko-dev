@@ -13,7 +13,8 @@
             "forcedColors": "ButtonText",
             "brand": {
               "light": "{color.gray.60}",
-              "dark": "{color.gray.50}"
+              "dark": "{color.gray.50}",
+              "prefersContrast": "{text.color.@base}"
             },
             "platform": {
               "default": "color-mix(in srgb, currentColor 15%, var(--color-gray-60))"
@@ -24,21 +25,30 @@
           "value": {
             "default": "{border.interactive.color.@base}",
             "prefersContrast": "ButtonText",
-            "forcedColors": "SelectedItem"
+            "forcedColors": "SelectedItem",
+            "brand": {
+              "prefersContrast": "{border.interactive.color.@base}"
+            }
           }
         },
         "active": {
           "value": {
             "default": "{border.interactive.color.@base}",
             "prefersContrast": "AccentColor",
-            "forcedColors": "ButtonText"
+            "forcedColors": "ButtonText",
+            "brand": {
+              "prefersContrast": "{border.interactive.color.@base}"
+            }
           }
         },
         "disabled": {
           "value": {
             "default": "{border.interactive.color.@base}",
             "prefersContrast": "GrayText",
-            "forcedColors": "GrayText"
+            "forcedColors": "GrayText",
+            "brand": {
+              "prefersContrast": "{border.interactive.color.@base}"
+            }
           }
         }
       }
